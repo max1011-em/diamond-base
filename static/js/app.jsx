@@ -1,25 +1,43 @@
 const { useState, useEffect } = React;
-const { Redirect, Route, Link, BrowserRouter } = ReactRouterDOM;
+const { Redirect, Route, Link, BrowserRouter, NavLink } = ReactRouterDOM;
 
 function App() {
     const [userLogin, setLogin] = useState(false);
-    const getLogin = (login) => {
-        setLogin(login)
-    }
+    const [curUserId, setCurUserId] = useState(null);
+    
+    const getLogin = (loginInfo) => {
+        setLogin(loginInfo.user_loggedin);
+        setCurUserId(loginInfo.user_id)
+    };
+    //userEffect to check the session. fetch server. 
 
-    return (
+    return (  
         <BrowserRouter>
+            {userLogin ? 
+                //pass the set state to searchbar
+                <header>
+                <NavLink 
+                to="/main"
+                activeClassName="navlink-active"
+                className="nav-link">Portfolio</NavLink>
+                <NavLink 
+                to="/profile"
+                activeClassName="navlink-active"
+                className="nav-link">Profile</NavLink>
+                </header>
+                : null}
+            
             <Route exact path="/">
                 <Homepage />
             </Route>
             <Route exact path="/login">
                 {userLogin? 
-                <Redirect to="/coins"/> 
+                <Redirect to="/main"/> 
                 : <LoginContainer getLogin={getLogin}
                 />}     
             </Route>
-            <Route exact path="/coins">
-                <Coins />        
+            <Route exact path="/main">
+                <MainContainer curUserId={curUserId}/>      
             </Route>
             <Route exact path="/signup">
                 <SignupContainer />        

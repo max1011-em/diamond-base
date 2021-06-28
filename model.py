@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -25,7 +26,7 @@ class Coin(db.Model):
 
     coin_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     coin_name = db.Column(db.String, nullable=False)
-    coin_ticker = db.Column(db.String, nullable=False)
+    coin_symbol = db.Column(db.String, nullable=False)
 
     def __repr__(self):
         return f"<Coin coin_id={self.coin_id} coin_name={self.coin_name}>"
@@ -37,15 +38,17 @@ class UserCoin(db.Model):
     __tablename__ = "user_coins"
 
     user_coin_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    avg_price = db.Column(db.Integer, nullable=False)
-    qty = db.Column(db.Integer, nullable=False)
-    target_price = db.Column(db.Integer, nullable=False)
-    favorite_coin = db.Column(db.Boolean, nullable=False)
     coin_id = db.Column(db.Integer, db.ForeignKey("coins.coin_id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    purchased_date = db.Column(db.DateTime, nullable=False)
+    ave_price = db.Column(db.Integer, nullable=False)
+    qty = db.Column(db.Integer, nullable=False)
+    favorite_coin = db.Column(db.Boolean, nullable=False)
+    # target_price = db.Column(db.Integer, nullable=False)
 
-    user = db.relationship("User",backref="user_coins")
+
     coin = db.relationship("Coin", backref="user_coins")
+    user = db.relationship("User",backref="user_coins")
 
     def __repr__(self):
         return f"<UserCoin user_coin_id={self.user_coin_id} coin_id={self.coin_id} qty={self.qty}>"

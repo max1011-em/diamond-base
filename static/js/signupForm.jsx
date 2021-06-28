@@ -24,7 +24,7 @@ function SignupForm({getSignup}) {
         })
         .then(res => res.json())
         .then((result) => {
-            getSignup(JSON.parse(result));
+            getSignup(result);
             setEmail("");
             setName("");
             setPassword(""); 

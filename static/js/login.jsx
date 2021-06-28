@@ -12,7 +12,7 @@ function Homepage() {
   );
 }
 
-function LoginForm({getUser}) {
+function LoginForm({setAppLoginStatus}) {
   const [username, setUser] = useState("");
   const [password, setPassword] = useState("");
 
@@ -33,8 +33,7 @@ function LoginForm({getUser}) {
     })
       .then((res) => res.json())
       .then((result) => {
-        getUser(result.user_loggedin);
-        // Also send result.message
+        setAppLoginStatus(result);
       });
   };
 
@@ -53,7 +52,7 @@ function LoginForm({getUser}) {
       <div>
         <label>Password</label>
         <input 
-          type="text" 
+          type="password" 
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -68,14 +67,14 @@ function LoginForm({getUser}) {
 function LoginContainer({getLogin}) {
   const [loginStatus, setLoginStatus] = useState(true);
 
-  const setAppLoginStatus = (isLoggedIn) => {
-    setLoginStatus(isLoggedIn);
-    getLogin(isLoggedIn);
+  const setAppLoginStatus = (result) => {
+    setLoginStatus(result.user_loggedin);
+    getLogin(result);
   };
 
   return (
       <div>
-          <LoginForm getUser={setAppLoginStatus} />
+          <LoginForm setAppLoginStatus={setAppLoginStatus} />
           <Link to="/signup">Sign up</Link>
           {loginStatus || <h1>You are not here, Please signup!</h1>}
       </div>
