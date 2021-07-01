@@ -51,8 +51,12 @@ def get_coin_by_coin_name(coin_name):
   
   return Coin.query.filter(Coin.coin_name == coin_name).first()
 
+def get_coin_by_coin_id(coin_id):
+  
+  return Coin.query.filter(Coin.coin_id == coin_id).first()
 
-def create_user_investment(coin, user, purchased_date, ave_price, qty, favorite_coin=False):
+
+def create_user_coin(coin, user, purchased_date, ave_price, qty, favorite_coin=False):
     
   user_coin = UserCoin(
       coin = coin,
@@ -67,7 +71,8 @@ def create_user_investment(coin, user, purchased_date, ave_price, qty, favorite_
 
   return user_coin
 
-def get_user_investment_by_user_id(user_id):
+
+def get_user_coin_by_user_id(user_id):
     
   return UserCoin.query.filter_by(user_id = user_id).all()
 

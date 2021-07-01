@@ -99,7 +99,6 @@ function AddUserInvestment({addInvestment}) {
 
 function UserInvestmentContainer({curUserId}) {
   const [userInvestments, setUserInvestment] = useState([]);
-  console.log(userInvestments)
 
   const addInvestment = (coinName, purchasedDate, avePrice, qty, userCoinId) => {
     const newInvestment = {coinName, purchasedDate, avePrice, qty, userCoinId};
@@ -110,11 +109,15 @@ function UserInvestmentContainer({curUserId}) {
   useEffect(() => {
     fetch("/investments.json")
       .then((res) => res.json())
-      .then((data) => setUserInvestment(data.investments));
+      .then((data) => {
+        console.log(data)
+        setUserInvestment(data.investments)
+      });
   }, []);
   
   const result = userInvestments.map((curInvestment,i) => {
-    if (curInvestment.userCoinId === curUserId) {
+    if (curInvestment.userCoinId === curUserId 
+        && curInvestment.qty > 0) {
       return <UserInvestment 
           key={i}
           coinName={curInvestment.coinName}

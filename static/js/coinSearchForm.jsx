@@ -29,7 +29,6 @@ function CoinInfo({coinInfo}) {
 }
 
 function CoinSearchForm() {
-  // const initialState = {image: {thumb: "https://static.toiimg.com/thumb/msid-67586673,width-800,height-600,resizemode-75,imgsize-3918697,pt-32,y_pad-40/67586673.jpg"}}
   const [coin, setCoin] = useState("");
   const [coinInfo, setInfo] = useState({});
   const [hasSearched, setHasSearched] = useState(false);
@@ -44,6 +43,21 @@ function CoinSearchForm() {
       setInfo(data);
       setHasSearched(true)
     });
+  }
+
+  const addFavCoin = (e) => {
+    e.preventDefault();
+    fetch("/add-favorite-coin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ coin }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result)
+      });
   }
 
   return (
@@ -63,7 +77,7 @@ function CoinSearchForm() {
       {hasSearched &&  <>
         <CoinGraph coinData={coinInfo}/>
         <CoinInfo coinInfo={coinInfo}/>
-        <button>Add Favorite</button>
+        <button onClick={addFavCoin}>Add Favorite</button>
       </>
       }
     </div>  
@@ -72,3 +86,13 @@ function CoinSearchForm() {
 };
 
 
+function UserFavoriteCoin() {
+  const [userFavoriteCoin, setUserFavoriteCoin] = useState([]);
+  
+
+  return (
+    <div>
+
+    </div>
+  )
+}

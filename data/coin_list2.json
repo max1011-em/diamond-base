@@ -1,5 +1,12 @@
-[{
+[
+  {
   "id": "bitcoin",
   "symbol": "btc",
   "name": "Bitcoin"
-}]
+},
+{
+  "id": "dogecoin",
+  "symbol": "doge",
+  "name": "Dogecoin"
+}
+]
