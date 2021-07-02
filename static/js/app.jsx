@@ -4,7 +4,7 @@ const { Redirect, Route, Link, BrowserRouter, NavLink } = ReactRouterDOM;
 function App() {
     const [userLogin, setLogin] = useState(false);
     const [curUserId, setCurUserId] = useState(null);
-    
+
     const getLogin = (loginInfo) => {
         setLogin(loginInfo.user_loggedin);
         setCurUserId(loginInfo.user_id)

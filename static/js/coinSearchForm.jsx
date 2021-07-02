@@ -28,6 +28,7 @@ function CoinInfo({coinInfo}) {
   )
 }
 
+
 function CoinSearchForm() {
   const [coin, setCoin] = useState("");
   const [coinInfo, setInfo] = useState({});
@@ -86,13 +87,4 @@ function CoinSearchForm() {
 };
 
 
-function UserFavoriteCoin() {
-  const [userFavoriteCoin, setUserFavoriteCoin] = useState([]);
-  
 
-  return (
-    <div>
-
-    </div>
-  )
-}
