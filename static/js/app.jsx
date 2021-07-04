@@ -19,7 +19,7 @@ function App() {
                 <NavLink 
                 to="/main"
                 activeClassName="navlink-active"
-                className="nav-link">Portfolio</NavLink>
+                className="nav-link">Main</NavLink>
                 <NavLink 
                 to="/profile"
                 activeClassName="navlink-active"
@@ -36,7 +36,7 @@ function App() {
                 : <LoginContainer getLogin={getLogin}
                 />}     
             </Route>
-            <Route exact path="/main">
+            <Route path="/main">
                 <MainContainer curUserId={curUserId}/>      
             </Route>
             <Route exact path="/signup">

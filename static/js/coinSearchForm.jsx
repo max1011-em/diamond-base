@@ -1,4 +1,4 @@
-const { Redirect, Route, Link, BrowserRouter } = ReactRouterDOM;
+const { Redirect, Route, Link, BrowserRouter, useHistory } = ReactRouterDOM;
 const { useState, useEffect } = React;
 
 function CoinInfo({coinInfo}) {
@@ -29,36 +29,22 @@ function CoinInfo({coinInfo}) {
 }
 
 
-function CoinSearchForm() {
-  const [coin, setCoin] = useState("");
-  const [coinInfo, setInfo] = useState({});
-  const [hasSearched, setHasSearched] = useState(false);
-
+function CoinSearchForm(props) {
+  const [coin, setCoin] = useState("")
+  const {getCoinName, getCoinInfo, getHasSearched} = props;
   const url = `https://api.coingecko.com/api/v3/coins/${coin}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
+  let history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch(url)
     .then(response => response.json())
     .then(data => {
-      setInfo(data);
-      setHasSearched(true)
+      getCoinName(coin)
+      getCoinInfo(data)
+      getHasSearched(true)
+      history.push(`/main/${coin}`)
     });
-  }
-
-  const addFavCoin = (e) => {
-    e.preventDefault();
-    fetch("/add-favorite-coin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ coin }),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result)
-      });
   }
 
   return (
@@ -75,12 +61,6 @@ function CoinSearchForm() {
         </div>
         <button>Search</button>
       </form>  
-      {hasSearched &&  <>
-        <CoinGraph coinData={coinInfo}/>
-        <CoinInfo coinInfo={coinInfo}/>
-        <button onClick={addFavCoin}>Add Favorite</button>
-      </>
-      }
     </div>  
 
   )

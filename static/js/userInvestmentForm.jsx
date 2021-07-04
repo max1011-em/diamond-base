@@ -5,16 +5,20 @@ function UserInvestment(props) {
   return (
     <table>
       <thead>
+      <tr>
         <th>Coin Name</th>
         <th>Purchase Date</th>
         <th>Average Price</th>
         <th>Quantity</th>
+      </tr>
       </thead>
       <tbody>
+        <tr>
         <td>{coinName}</td>
         <td>{purchasedDate}</td>
         <td>${avePrice}</td>
         <td>{qty}</td>
+        </tr>
       </tbody>
     </table>
   );
@@ -110,7 +114,6 @@ function UserInvestmentContainer({curUserId}) {
     fetch("/investments.json")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setUserInvestment(data.investments)
       });
   }, []);

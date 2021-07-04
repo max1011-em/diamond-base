@@ -1,7 +1,7 @@
 """Server for cryptocurrency app."""
 
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import connect_to_db, User, db, connect_to_db
+from model import connect_to_db, User, db, connect_to_db, UserCoin
 import crud
 
 app = Flask(__name__)
@@ -38,8 +38,6 @@ def process_login():
   
   session["logged_in_user_email"] = user.email
   user_id = crud.get_user_id_by_email(username)
-
-  print("\n\n","session","id",session,user_id,"\n\n")
 
   return jsonify({
       "user_loggedin": True,
@@ -101,25 +99,38 @@ def add_user_investment():
 
   user = crud.get_user_by_email(user_email)
   coin = crud.get_coin_by_coin_name(coin_name)
+  user_coin = UserCoin.query.filter_by(coin_id=coin.coin_id).first()
 
-  print("\n\n\n","user_investment", session["logged_in_user_email"],user, coin,"\n\n\n")
-  
-  user_coin = crud.create_user_coin(coin,
-                                    user, 
-                                    purchased_date, 
-                                    ave_price,
-                                    qty
-                                    )
+  if not user_coin:
+    crud.create_user_coin(coin,
+                          user, 
+                          purchased_date, 
+                          ave_price,
+                          qty
+                          )
+    new_investment = {
+        "coinName": coin_name,
+        "purchasedDate": purchased_date,
+        "avePrice": ave_price,
+        "qty": qty,
+        "userCoinId": user_coin.user_id
+    }
+    return jsonify({"success": True, "investmentAdded": new_investment})
 
-  new_investment = {
-      "coinName": coin_name,
-      "purchasedDate": purchased_date,
-      "avePrice": ave_price,
-      "qty": qty,
-      "userCoinId": user_coin.user_id
-  }
+  else:
+    user_coin.purchased_date = purchased_date
+    user_coin.ave_price = ave_price
+    user_coin.qty = qty
+    db.session.commit()
+    new_investment = {
+        "coinName": coin_name,
+        "purchasedDate": purchased_date,
+        "avePrice": ave_price,
+        "qty": qty,
+        "userCoinId": user_coin.user_id
+    }
+    return jsonify({"success": True, "investmentAdded": new_investment})
 
-  return jsonify({"success": True, "investmentAdded": new_investment})
 
 
 @app.route("/favorite-coin.json")
@@ -128,25 +139,26 @@ def get_favorite_coin_json():
 
   user_email = session["logged_in_user_email"]
   user = crud.get_user_by_email(user_email)
-  user_coins = crud.get_user_coin_by_user_id(user.user_id)
+  user_fav_coins = crud.get_user_fav_coin_by_user_id(user.user_id)
 
   USER_FAVORITE_COIN = []
 
-  for user_coin in user_coins:
+  for user_coin in user_fav_coins:
     coin = crud.get_coin_by_coin_id(user_coin.coin_id)
     user_favorite_coin = {
-        "coinName": coin.coin_name
+        "coinName": coin.coin_name,
+        "userCoinId": user_coin.user_id
     }
     USER_FAVORITE_COIN.append(user_favorite_coin)
 
-  return jsonify({"investments": USER_FAVORITE_COIN})
+  return jsonify({"fav_coin": USER_FAVORITE_COIN})
 
 
 @app.route("/add-favorite-coin", methods=['POST'])
 def add_favorite_coin():
   """add user favorite coin."""
 
-  coin_name = request.json.get("coin")
+  coin_name = request.json.get("coinName")
   user_email = session["logged_in_user_email"]
 
   coin = crud.get_coin_by_coin_name(coin_name)
@@ -157,11 +169,8 @@ def add_favorite_coin():
     if user_coin.coin_id == coin.coin_id:
       user_coin.favorite_coin = True
 
-      new_user_favorite_coin = {
-        "coinName": coin_name
-      }
       db.session.commit()
-      return jsonify({"success": True, "favoriteCoinAdded": new_user_favorite_coin})
+      return jsonify({"success": True})
 
   user_coin = crud.create_user_coin(coin,
                                     user, 
@@ -169,14 +178,12 @@ def add_favorite_coin():
                                     None,
                                     0
                                     )
-  new_user_favorite_coin = {
-        "coinName": coin_name
-      }
+
   user_coin.favorite_coin = True
   db.session.commit()
-  return jsonify({"success": True, "favoriteCoinAdded": new_user_favorite_coin})
+  return jsonify({"success": True})
 
-
+# print("\n\n","session","id",session,"\n\n")
 if __name__ == "__main__":
   connect_to_db(app)
   app.run(host="0.0.0.0", debug=True, use_debugger=True, use_reloader=True)

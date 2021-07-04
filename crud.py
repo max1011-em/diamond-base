@@ -65,7 +65,13 @@ def create_user_coin(coin, user, purchased_date, ave_price, qty, favorite_coin=F
 
 def get_user_coin_by_user_id(user_id):
     
-  return UserCoin.query.filter_by(user_id = user_id).all()
+  return UserCoin.query.filter(UserCoin.user_id == user_id).all()
+
+
+def get_user_fav_coin_by_user_id(user_id):
+    
+  return UserCoin.query.filter(UserCoin.user_id == user_id, 
+                               UserCoin.favorite_coin == True ).all()
 
 
 if __name__ == "__main__":
