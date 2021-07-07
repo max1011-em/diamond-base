@@ -31,7 +31,7 @@ function CoinInfo({coinInfo}) {
 
 function CoinSearchForm(props) {
   const [coin, setCoin] = useState("")
-  const {getCoinName, getCoinInfo, getHasSearched} = props;
+  const {getCoinName, getCoinInfo} = props;
   const url = `https://api.coingecko.com/api/v3/coins/${coin}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
   let history = useHistory();
 
@@ -42,7 +42,6 @@ function CoinSearchForm(props) {
     .then(data => {
       getCoinName(coin)
       getCoinInfo(data)
-      getHasSearched(true)
       history.push(`/main/${coin}`)
     });
   }

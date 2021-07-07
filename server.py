@@ -94,8 +94,8 @@ def add_user_investment():
   user_email = session["logged_in_user_email"]
   coin_name = request.json.get("coin_name")
   purchased_date = request.json.get("purchased_date")
-  ave_price = int(request.json.get("ave_price"))
-  qty = int(request.json.get("qty"))
+  ave_price = float(request.json.get("ave_price"))
+  qty = float(request.json.get("qty"))
 
   user = crud.get_user_by_email(user_email)
   coin = crud.get_coin_by_coin_name(coin_name)
@@ -112,8 +112,7 @@ def add_user_investment():
         "coinName": coin_name,
         "purchasedDate": purchased_date,
         "avePrice": ave_price,
-        "qty": qty,
-        "userCoinId": user_coin.user_id
+        "qty": qty
     }
     return jsonify({"success": True, "investmentAdded": new_investment})
 
@@ -126,8 +125,7 @@ def add_user_investment():
         "coinName": coin_name,
         "purchasedDate": purchased_date,
         "avePrice": ave_price,
-        "qty": qty,
-        "userCoinId": user_coin.user_id
+        "qty": qty
     }
     return jsonify({"success": True, "investmentAdded": new_investment})
 

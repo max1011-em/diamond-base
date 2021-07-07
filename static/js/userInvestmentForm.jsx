@@ -101,7 +101,7 @@ function AddUserInvestment({addInvestment}) {
   );
 }
 
-function UserInvestmentContainer({curUserId}) {
+function UserInvestmentContainer() {
   const [userInvestments, setUserInvestment] = useState([]);
 
   const addInvestment = (coinName, purchasedDate, avePrice, qty, userCoinId) => {
@@ -114,13 +114,13 @@ function UserInvestmentContainer({curUserId}) {
     fetch("/investments.json")
       .then((res) => res.json())
       .then((data) => {
-        setUserInvestment(data.investments)
+        setUserInvestment(data.investments);
+        console.log("in useeffect")
       });
   }, []);
-  
+  console.log(userInvestments)
   const result = userInvestments.map((curInvestment,i) => {
-    if (curInvestment.userCoinId === curUserId 
-        && curInvestment.qty > 0) {
+    if (curInvestment.qty > 0) {
       return <UserInvestment 
           key={i}
           coinName={curInvestment.coinName}
@@ -133,8 +133,8 @@ function UserInvestmentContainer({curUserId}) {
 
   return (
     <div>
-      <h2>User Investment</h2>
-      <h4>Add your investment</h4>
+      <UserInvestmentGraph userInvestments={userInvestments}/>
+      <h2>Add your investment</h2>
       <AddUserInvestment addInvestment={addInvestment} />
       {result}
     </div>
