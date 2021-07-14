@@ -25,9 +25,10 @@ def get_user_id_by_email(email):
   return User.query.filter(User.email == email).first().user_id
 
 
-def create_coin(coin_name, coin_symbol):
+def create_coin(coin_id_name, coin_name, coin_symbol):
 
   coin = Coin(
+      coin_id_name=coin_id_name,
       coin_name=coin_name,
       coin_symbol=coin_symbol
   )
@@ -35,6 +36,11 @@ def create_coin(coin_name, coin_symbol):
   db.session.commit()
 
   return coin
+
+
+def get_coins():
+    
+  return Coin.query.all()
 
 
 def get_coin_by_coin_name(coin_name):

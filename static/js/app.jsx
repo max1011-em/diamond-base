@@ -3,16 +3,28 @@ const { Redirect, Route, Link, BrowserRouter, NavLink } = ReactRouterDOM;
 
 function App() {
     const [userLogin, setLogin] = useState(false);
-
+    const [isPaperHand, setIsPaperHand] = useState("");
+    const [session, setSession] = useState(null);
+    
     const getLogin = (loginInfo) => {
         setLogin(loginInfo.user_loggedin);
     };
-    //userEffect to check the session. fetch server. 
+
+    const getPaperHand = (paperHand) => {
+        setIsPaperHand(paperHand)
+    }
+
+    useEffect(() => {
+        fetch("/session")
+          .then((res) => res.json())
+          .then((result) => {
+            setSession(result.hasSession)
+          });
+      }, []);
 
     return (  
         <BrowserRouter>
             {userLogin ? 
-                //pass the set state to searchbar
                 <header>
                 <NavLink 
                 to="/main"
@@ -26,7 +38,17 @@ function App() {
                 : null}
             
             <Route exact path="/">
-                <Homepage />
+                <Homepage getPaperHand={getPaperHand}/>
+            </Route>
+
+            {isPaperHand ==="Yes" ? 
+              <Redirect to="/block"/>
+            : (isPaperHand === "No"?
+            <Redirect to="/login"/> : null)
+            }
+            
+            <Route path="/main">
+                <MainContainer />      
             </Route>
             <Route exact path="/login">
                 {userLogin? 
@@ -34,8 +56,8 @@ function App() {
                 : <LoginContainer getLogin={getLogin}
                 />}     
             </Route>
-            <Route path="/main">
-                <MainContainer />      
+            <Route exact path="/block">
+                <BlockUser />
             </Route>
             <Route exact path="/signup">
                 <SignupContainer />        

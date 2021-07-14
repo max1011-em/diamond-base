@@ -46,6 +46,18 @@ def process_login():
   })
 
 
+@app.route("/session")
+def get_session():
+  user_email = session["logged_in_user_email"]
+
+  print("\n\n\n",user_email,"\n\n\n")
+
+  if user_email:
+    return jsonify({"hasSession": True})
+  else:
+    return jsonify({"hasSession": False})
+
+
 @app.route("/users", methods=['POST'])
 def register_user():
   """create account."""
@@ -63,6 +75,20 @@ def register_user():
       return jsonify(True)
 
 
+@app.route("/coins.json")
+def get_coins_json():
+  coins = crud.get_coins()
+
+  COINS = []
+  
+  for coin in coins:
+
+    COINS.append({"coin_id_name": coin.coin_id_name,
+                  "coin_name": coin.coin_name})
+
+  return jsonify({"coins": COINS})
+
+
 @app.route("/investments.json")
 def get_investments_json():
   """Return a JSON response with all investments."""
@@ -76,7 +102,7 @@ def get_investments_json():
   for user_coin in user_coins:
     coin = crud.get_coin_by_coin_id(user_coin.coin_id)
     user_investment = {
-        "coinName": coin.coin_name,
+        "coinName": coin.coin_id_name,
         "purchasedDate": user_coin.purchased_date,
         "avePrice": user_coin.ave_price,
         "qty": user_coin.qty,

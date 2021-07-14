@@ -25,6 +25,7 @@ class Coin(db.Model):
     __tablename__ = "coins"
 
     coin_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    coin_id_name = db.Column(db.String, nullable=False)
     coin_name = db.Column(db.String, nullable=False)
     coin_symbol = db.Column(db.String, nullable=False)
 

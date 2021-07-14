@@ -115,10 +115,9 @@ function UserInvestmentContainer() {
       .then((res) => res.json())
       .then((data) => {
         setUserInvestment(data.investments);
-        console.log("in useeffect")
       });
   }, []);
-  console.log(userInvestments)
+  // console.log(userInvestments)
   const result = userInvestments.map((curInvestment,i) => {
     if (curInvestment.qty > 0) {
       return <UserInvestment 

@@ -2,16 +2,6 @@
 const { Link } = ReactRouterDOM;
 const { useState, useEffect } = React;
 
-function Homepage() {
-  return (
-    <div>
-      <h1>Are you paper hands?</h1>
-      <button>Yes</button>
-      <button>No</button>
-    </div>
-  );
-}
-
 function LoginForm({setAppLoginStatus}) {
   const [username, setUser] = useState("");
   const [password, setPassword] = useState("");
@@ -40,6 +30,7 @@ function LoginForm({setAppLoginStatus}) {
   return (
     <form onSubmit={handleSubmit}>
       <div>
+        <h1>Welcome to "  " </h1>
         <label>User name</label>
         <input 
           type="text" 

@@ -18,7 +18,7 @@ function MainContainer() {
 
   return (
     <div>
-      <CoinSearchForm 
+      <Auto 
         coinName={coinName}
         getCoinName={getCoinName} 
         getCoinInfo={getCoinInfo}
