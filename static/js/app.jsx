@@ -4,8 +4,7 @@ const { Redirect, Route, Link, BrowserRouter, NavLink } = ReactRouterDOM;
 function App() {
     const [userLogin, setLogin] = useState(false);
     const [isPaperHand, setIsPaperHand] = useState("");
-    const [session, setSession] = useState(null);
-    
+
     const getLogin = (loginInfo) => {
         setLogin(loginInfo.user_loggedin);
     };
@@ -18,7 +17,7 @@ function App() {
         fetch("/session")
           .then((res) => res.json())
           .then((result) => {
-            setSession(result.hasSession)
+            setLogin(result.hasSession)
           });
       }, []);
 
@@ -48,13 +47,12 @@ function App() {
             }
             
             <Route path="/main">
-                <MainContainer />      
+                {userLogin ? <MainContainer /> :  <Redirect to="/login"/>}     
             </Route>
             <Route exact path="/login">
                 {userLogin? 
                 <Redirect to="/main"/> 
-                : <LoginContainer getLogin={getLogin}
-                />}     
+                :  <LoginContainer getLogin={getLogin} />}     
             </Route>
             <Route exact path="/block">
                 <BlockUser />

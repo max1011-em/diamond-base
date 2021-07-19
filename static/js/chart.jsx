@@ -65,7 +65,7 @@ function UserInvestmentGraph({userInvestments}) {
   async function reduce(userInvestments) {
     let result = 0;
     for (const coin of userInvestments) {
-      const url = `https://api.coingecko.com/api/v3/coins/${coin.coinName}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
+      const url = `https://api.coingecko.com/api/v3/coins/${coin.coinIdName}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
       const res = await fetch(url);
       const coinInfo = await res.json();
       let curPrice = coinInfo.market_data.current_price.usd

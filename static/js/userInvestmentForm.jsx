@@ -1,26 +1,129 @@
 const { useState, useEffect } = React;
 
-function UserInvestment(props) {
-  const { coinName, purchasedDate, avePrice, qty} = props;
+function UserInvestment({data}) {
   return (
+    <div>
+    <h1>Your coin list</h1> 
     <table>
       <thead>
-      <tr>
-        <th>Coin Name</th>
-        <th>Purchase Date</th>
-        <th>Average Price</th>
-        <th>Quantity</th>
-      </tr>
+        <tr>
+          <th>Coin Name</th>
+          <th>Purchase Date</th>
+          <th>Average Price</th>
+          <th>Quantity</th>
+        </tr>
       </thead>
       <tbody>
-        <tr>
-        <td>{coinName}</td>
-        <td>{purchasedDate}</td>
-        <td>${avePrice}</td>
-        <td>{qty}</td>
-        </tr>
+        {data.map((coin,i) => (
+          <tr key={i}>
+            <td>{coin.coinName}</td>
+            <td>{coin.purchasedDate}</td>
+            <td>${coin.avePrice}</td>
+            <td>{coin.qty}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
+    </div>
+  );
+}
+
+function AutoCompUserCoin({getCoinName,getCoinIdName}) {
+  const [active, setActive] = useState(0);
+  const [isShow, setIsShow] = useState(false);
+  const [filtered, setFiltered] = useState([]);
+  const [input, setInput] = useState("");
+  const [suggestions, setSuggestion] = useState([]);
+
+  useEffect(() => {
+    const coins = [];
+    fetch("/coins.json")
+      .then((res) => res.json())
+      .then((result) => {
+        result.coins.map((value) => {
+          return coins.push(value);
+        });
+      });
+      setSuggestion(coins);
+  }, []);
+
+  const onChange = e => {
+    const input = e.currentTarget.value;
+    const newFilteredSuggestions = suggestions.filter(
+      ({coin_name}) => coin_name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      ).map(({coin_name}) => coin_name);
+    setActive(0);
+    setFiltered(newFilteredSuggestions);
+    setIsShow(true);
+    setInput(e.currentTarget.value)
+  };
+
+  const onClick = e => {
+    setActive(0);
+    setFiltered([]);
+    setIsShow(false);
+    setInput(e.currentTarget.innerText);
+    getCoinName(e.currentTarget.innerText);
+    const findCoinId = suggestions.filter(({coin_name}) => coin_name === e.currentTarget.innerText);
+    getCoinIdName(findCoinId[0].coin_id_name)
+  };
+
+  const onKeyDown = e => {
+    if (e.keyCode === 13) { // enter key
+      setActive(0);
+      setIsShow(false);
+      setInput(filtered[active])
+    }
+    else if (e.keyCode === 38) { // up arrow
+      return (active === 0) ? null : setActive(active - 1);
+    }
+    else if (e.keyCode === 40) { // down arrow
+      return (active - 1 === filtered.length) ? null : setActive(active + 1);
+    }
+  };
+
+  const renderAutocomplete = () => {
+    if (isShow && input) {
+      if (filtered.length) {
+        return (
+          <ul className="autocomplete">
+            {filtered.map((suggestion, index) => {
+              let className;
+              if (index === active) {
+                className = "active";
+              }
+              return (
+                <li className={className} key={suggestion} onClick={onClick}>
+                  {suggestion}
+                </li>
+              );
+            })}
+          </ul>
+        );
+      } else {
+        return (
+          <div className="no-autocomplete">
+            <em>Not found</em>
+          </div>
+        );
+      }
+    }
+    return <></>;
+  }
+
+  return (
+    <div>
+          <input
+            id="auto"
+            type="text"
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            name="coinName"
+            placeholder="Type to add your coins" 
+            value={input}
+          />
+          {renderAutocomplete()}
+    </div>
   );
 }
 
@@ -29,7 +132,16 @@ function AddUserInvestment({addInvestment}) {
   const [purchsedDate, setDate] = useState("");
   const [avePrice, setAvePrice] = useState("");
   const [qty, setQty] = useState("");
+  const [coinIdName, setCoinIdName] = useState("")
   
+  const getCoinName = (coinName) => {
+    setCoinName(coinName)
+  };
+
+  const getCoinIdName = (coinIdName) => {
+    setCoinIdName(coinIdName)
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -37,7 +149,8 @@ function AddUserInvestment({addInvestment}) {
       "coin_name": coinName,
       "purchased_date":purchsedDate,
       "ave_price": avePrice,
-      "qty": qty
+      "qty": qty,
+      "coin_id_name":coinIdName
     };
 
     fetch('/add-investment', {
@@ -49,8 +162,8 @@ function AddUserInvestment({addInvestment}) {
     })
     .then((res) => res.json())
     .then((result) => {
-      const {investmentAdded: { coinName, purchasedDate, avePrice, qty, userCoinId},} = result;
-      addInvestment(coinName, purchasedDate, avePrice, qty, userCoinId)
+      const {investmentAdded: { coinName, coinIdName, purchasedDate, avePrice, qty},} = result;
+      addInvestment(coinName, coinIdName, purchasedDate, avePrice, qty)
     });
   };
 
@@ -58,13 +171,7 @@ function AddUserInvestment({addInvestment}) {
     <form onSubmit={handleSubmit}>
       <div>
         <label>Coin Name</label>
-        <input 
-          type="text"
-          name="coinname"
-          value={coinName}
-          onChange={(e) => setCoinName(e.target.value)}
-          id="coinname"
-          />
+        <AutoCompUserCoin getCoinName={getCoinName} getCoinIdName={getCoinIdName}/>
       </div>
       <div>
         <label>Purchased date</label>
@@ -104,8 +211,8 @@ function AddUserInvestment({addInvestment}) {
 function UserInvestmentContainer() {
   const [userInvestments, setUserInvestment] = useState([]);
 
-  const addInvestment = (coinName, purchasedDate, avePrice, qty, userCoinId) => {
-    const newInvestment = {coinName, purchasedDate, avePrice, qty, userCoinId};
+  const addInvestment = (coinName, coinIdName, purchasedDate, avePrice, qty) => {
+    const newInvestment = {coinName, coinIdName, purchasedDate, avePrice, qty};
     const curInvestment = [...userInvestments];
     setUserInvestment([...curInvestment, newInvestment]);
   }
@@ -117,25 +224,26 @@ function UserInvestmentContainer() {
         setUserInvestment(data.investments);
       });
   }, []);
-  // console.log(userInvestments)
-  const result = userInvestments.map((curInvestment,i) => {
-    if (curInvestment.qty > 0) {
-      return <UserInvestment 
-          key={i}
-          coinName={curInvestment.coinName}
-          purchasedDate={curInvestment.purchasedDate}
-          avePrice={curInvestment.avePrice}
-          qty={curInvestment.qty}
-          />
-    }
+
+  const data= userInvestments.filter((curInvestment,i) => {
+    return curInvestment.qty > 0;
+    // if (curInvestment.qty > 0) {
+    //   return <UserInvestment 
+    //       key={i}
+    //       coinName={curInvestment.coinName}
+    //       purchasedDate={curInvestment.purchasedDate}
+    //       avePrice={curInvestment.avePrice}
+    //       qty={curInvestment.qty}
+    //       />
+    // }
   });
 
   return (
     <div>
       <UserInvestmentGraph userInvestments={userInvestments}/>
-      <h2>Add your investment</h2>
+      <h1>Add your investment</h1>
       <AddUserInvestment addInvestment={addInvestment} />
-      {result}
+      <UserInvestment data={data}/>
     </div>
   )
 }

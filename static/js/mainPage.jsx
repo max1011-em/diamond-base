@@ -18,16 +18,21 @@ function MainContainer() {
 
   return (
     <div>
+      <button>Logout</button>
       <Auto 
         coinName={coinName}
         getCoinName={getCoinName} 
         getCoinInfo={getCoinInfo}
       />
+      <button>Logout</button>
         <Switch>
           <Route exact path={path}>
-            <h2>Your investment</h2>
+            <CoinbaseConnect />
+            <h1>Your investment</h1>
             <UserInvestmentContainer />
             <UserFavCoinContainer />
+            <TopVolCoinList />
+            {/* <CoinNews /> */}
           </Route>
 
           <Route exact path={`${path}/:${coinName}`}>

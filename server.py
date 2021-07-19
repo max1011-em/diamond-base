@@ -3,6 +3,8 @@
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from model import connect_to_db, User, db, connect_to_db, UserCoin
 import crud
+import requests
+
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -102,7 +104,8 @@ def get_investments_json():
   for user_coin in user_coins:
     coin = crud.get_coin_by_coin_id(user_coin.coin_id)
     user_investment = {
-        "coinName": coin.coin_id_name,
+        "coinIdName": coin.coin_id_name,
+        "coinName": coin.coin_name,
         "purchasedDate": user_coin.purchased_date,
         "avePrice": user_coin.ave_price,
         "qty": user_coin.qty,
@@ -119,6 +122,8 @@ def add_user_investment():
 
   user_email = session["logged_in_user_email"]
   coin_name = request.json.get("coin_name")
+  coin_id_name = request.json.get("coin_id_name")
+  print("\n\n\n","idname",coin_id_name,"\n\n\n")
   purchased_date = request.json.get("purchased_date")
   ave_price = float(request.json.get("ave_price"))
   qty = float(request.json.get("qty"))
@@ -136,6 +141,7 @@ def add_user_investment():
                           )
     new_investment = {
         "coinName": coin_name,
+        "coinIdName": coin_id_name,
         "purchasedDate": purchased_date,
         "avePrice": ave_price,
         "qty": qty
@@ -149,6 +155,7 @@ def add_user_investment():
     db.session.commit()
     new_investment = {
         "coinName": coin_name,
+        "coinIdName": coin_id_name,
         "purchasedDate": purchased_date,
         "avePrice": ave_price,
         "qty": qty
@@ -207,7 +214,29 @@ def add_favorite_coin():
   db.session.commit()
   return jsonify({"success": True})
 
-# print("\n\n","session","id",session,"\n\n")
+
+# @app.route("/coin-news")
+# def get_coin_news():
+  
+#   url = "https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=dcfffe03d27144269d6e5cfc90d60628"
+#   response = requests.get(url)
+#   data = response.json()
+#   #shedule update the news
+#   return jsonify(data['articles'][:5])
+
+
+@app.route("/connect-coinbase")
+def connect_coinbase():
+
+  url = f"https://www.coinbase.com/oauth/authorize?response_type=code&client_id=1532c63424622b6e9c4654e7f97ed40194a1547e114ca1c682f44283f39dfa49&redirect_uri=https%3A%2F%2Fexample.com%2Foauth%2Fcallback&state=134ef5504a94&scope=wallet:user:read,wallet:accounts:read"
+
+  response = requests.get(url)
+  data = response.json()
+  print(data)
+  # return jsonify(data)
+  return "test"
+
+
 if __name__ == "__main__":
   connect_to_db(app)
   app.run(host="0.0.0.0", debug=True, use_debugger=True, use_reloader=True)

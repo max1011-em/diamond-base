@@ -12,7 +12,7 @@ function CoinInfo({coinInfo}) {
   const athDate = coinInfo.market_data.ath_date.usd;
   const atl = coinInfo.market_data.atl.usd;
   const atlDate = coinInfo.market_data.atl_date.usd;
-
+    
   return (
     <div>
       <h1>{coinName}</h1>
@@ -24,6 +24,9 @@ function CoinInfo({coinInfo}) {
       
       <h3>All-Time-high: ${ath} {athDate}</h3> 
       <h3>All-Time-low: ${atl} {atlDate}</h3>
+
+      <h2>About {coinName}</h2>
+      <>{coinInfo.description.en}</>
     </div>
   )
 }
@@ -129,7 +132,7 @@ function Auto(props) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-          <h2>Autocomplete search coin</h2>
+          <h1>search coin</h1>
           <input
             id="auto"
             type="text"

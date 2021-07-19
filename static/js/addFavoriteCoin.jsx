@@ -59,7 +59,7 @@ function UserFavCoinContainer() {
     <div>
       {result.length > 0 && 
       <>
-      <h2>User favorite coin</h2>
+      <h1>User favorite coin</h1>
       {result}
       </>
       }
