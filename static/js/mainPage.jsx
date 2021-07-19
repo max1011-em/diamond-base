@@ -14,17 +14,20 @@ function MainContainer() {
     setInfo(coinInfo);
   };
 
+  const handleLogout = () => {
+
+  }
+  
   let { path, url } = useRouteMatch();
 
   return (
     <div>
-      <button>Logout</button>
       <Auto 
         coinName={coinName}
         getCoinName={getCoinName} 
         getCoinInfo={getCoinInfo}
       />
-      <button>Logout</button>
+      <button onClick={handleLogout}>Logout</button>
         <Switch>
           <Route exact path={path}>
             <CoinbaseConnect />
