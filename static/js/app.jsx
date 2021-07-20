@@ -9,6 +9,9 @@ function App() {
         setLogin(loginInfo.user_loggedin);
     };
 
+    const getLogout = (logoutInfo) => {
+        setLogin(logoutInfo.userLogout)
+    }
     const getPaperHand = (paperHand) => {
         setIsPaperHand(paperHand)
     }
@@ -47,7 +50,7 @@ function App() {
             }
             
             <Route path="/main">
-                {userLogin ? <MainContainer /> :  <Redirect to="/login"/>}     
+                {userLogin ? <MainContainer getLogout={getLogout}/> :  <Redirect to="/login"/>}     
             </Route>
             <Route exact path="/login">
                 {userLogin? 

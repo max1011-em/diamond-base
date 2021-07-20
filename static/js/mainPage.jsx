@@ -2,7 +2,7 @@ const { Redirect, Route, Link, BrowserRouter, Switch, useRouteMatch } = ReactRou
 const { useState, useEffect, useRef } = React;
 
 
-function MainContainer() {
+function MainContainer({getLogout}) {
   const [coinName, setCoin] = useState("");
   const [coinInfo, setInfo] = useState({});
 
@@ -14,20 +14,32 @@ function MainContainer() {
     setInfo(coinInfo);
   };
 
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.preventDefault();
 
+    fetch("/logout-process", {
+      method: "POST",
+      body: JSON.stringify({'logout': true}),
+      headers: {
+      'Content-Type': 'application/json'
+    }
+    })
+    .then(res => res.json())
+    .then((result) => {
+      getLogout(result.userLogout)
+    });
   }
   
   let { path, url } = useRouteMatch();
 
   return (
     <div>
+      <button onClick={handleLogout}>Logout</button>
       <Auto 
         coinName={coinName}
         getCoinName={getCoinName} 
         getCoinInfo={getCoinInfo}
       />
-      <button onClick={handleLogout}>Logout</button>
         <Switch>
           <Route exact path={path}>
             <CoinbaseConnect />
@@ -35,12 +47,13 @@ function MainContainer() {
             <UserInvestmentContainer />
             <UserFavCoinContainer />
             <TopVolCoinList />
-            {/* <CoinNews /> */}
+            {/* <CoinNews searchTerm={"cryptocurrency"}/> */}
           </Route>
 
           <Route exact path={`${path}/:${coinName}`}>
             <CoinGraph coinData={coinInfo}/>
             <CoinInfo coinInfo={coinInfo}/>
+            {/* <CoinNews searchTerm={coinName}/> */}
             <AddFavCoin coin={coinName}/>
           </Route>
 

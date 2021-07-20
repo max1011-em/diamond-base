@@ -48,11 +48,26 @@ def process_login():
   })
 
 
+@app.route("/logout-process", methods=['POST'])
+def process_logout():
+  """delete the session"""
+
+  logout = request.json.get("logout","")
+  
+  if logout:
+    del session["logged_in_user_email"]
+    print(session)
+
+  return jsonify({
+      "userLogout": False
+  })
+
+
 @app.route("/session")
 def get_session():
-  user_email = session["logged_in_user_email"]
+  user_email = session.get("logged_in_user_email","")
 
-  print("\n\n\n",user_email,"\n\n\n")
+  print("\n\n\n","useremail",user_email,"\n\n\n")
 
   if user_email:
     return jsonify({"hasSession": True})
@@ -215,14 +230,20 @@ def add_favorite_coin():
   return jsonify({"success": True})
 
 
-# @app.route("/coin-news")
-# def get_coin_news():
+@app.route("/coin-news")
+def get_coin_news():
+  search_term = request.args.get("term").replace(" ","").lower()
+  url = f"https://newsapi.org/v2/everything?q={search_term}&apiKey=dcfffe03d27144269d6e5cfc90d60628"
+  response = requests.get(url)
+  data = response.json()
+  print("search_term",search_term)
+
+  #shedule update the news
+  if search_term == "cryptocurrency" :
+    return jsonify(data['articles'][:5])
+  else:
+    return jsonify(data['articles'][:3])
   
-#   url = "https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=dcfffe03d27144269d6e5cfc90d60628"
-#   response = requests.get(url)
-#   data = response.json()
-#   #shedule update the news
-#   return jsonify(data['articles'][:5])
 
 
 @app.route("/connect-coinbase")
