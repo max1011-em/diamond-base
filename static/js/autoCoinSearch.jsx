@@ -26,8 +26,7 @@ function CoinInfo({coinInfo}) {
       <h3>All-Time-low: ${atl} {atlDate}</h3>
 
       <h2>About {coinName}</h2>
-      <div dangerouslySetInnerHTML={{__html: coinInfo.description.en}} />
-      
+      <div dangerouslySetInnerHTML={{__html: coinInfo.description.en}} />      
     </div>
   )
 }

@@ -2,14 +2,13 @@ const { useState, useEffect } = React;
 
 function CoinNews({searchTerm}) {
   const [news, setNews] = useState([]);
-  console.log(searchTerm)
+
   useEffect(() => {
   const url = `/coin-news?term=${searchTerm}`;
   fetch(url)
     .then(response => response.json())
     .then(result => {
       setNews(result);
-      console.log(result)
     });
   }, []);
 

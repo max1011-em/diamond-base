@@ -249,9 +249,15 @@ def get_coin_news():
 @app.route("/connect-coinbase")
 def connect_coinbase():
 
-  url = f"https://www.coinbase.com/oauth/authorize?response_type=code&client_id=1532c63424622b6e9c4654e7f97ed40194a1547e114ca1c682f44283f39dfa49&redirect_uri=https%3A%2F%2Fexample.com%2Foauth%2Fcallback&state=134ef5504a94&scope=wallet:user:read,wallet:accounts:read"
+  url = "https://api.coinbase.com/oauth/token"
 
-  response = requests.get(url)
+  response = requests.post(url, {
+    "grant_type": "authorization_code",
+    "code",
+    "client_id":,
+    "client_secret":,
+    "redirect_uri":
+  })
   data = response.json()
   print(data)
   # return jsonify(data)

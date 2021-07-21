@@ -30,6 +30,17 @@ function MainContainer({getLogout}) {
     });
   }
   
+  useEffect(() => {
+    const loc = window.location.href;
+    const code = loc.split('code=')[1];
+
+    if (code) {
+      console.log(code);
+    }
+
+  }, []);
+
+
   let { path, url } = useRouteMatch();
 
   return (
@@ -47,13 +58,13 @@ function MainContainer({getLogout}) {
             <UserInvestmentContainer />
             <UserFavCoinContainer />
             <TopVolCoinList />
-            {/* <CoinNews searchTerm={"cryptocurrency"}/> */}
+            <CoinNews searchTerm={"cryptocurrency"}/>
           </Route>
 
           <Route exact path={`${path}/:${coinName}`}>
             <CoinGraph coinData={coinInfo}/>
             <CoinInfo coinInfo={coinInfo}/>
-            {/* <CoinNews searchTerm={coinName}/> */}
+            <CoinNews searchTerm={coinName}/>
             <AddFavCoin coin={coinName}/>
           </Route>
 
