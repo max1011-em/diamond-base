@@ -2,3 +2,4 @@ apikey.py
 secret.js
 coinbase_auth.py
 coinbase_wallet.py
+__pycache__
