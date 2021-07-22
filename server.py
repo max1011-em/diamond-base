@@ -232,36 +232,36 @@ def add_favorite_coin():
 
 @app.route("/coin-news")
 def get_coin_news():
-  search_term = request.args.get("term").replace(" ","").lower()
-  url = f"https://newsapi.org/v2/everything?q={search_term}&apiKey=dcfffe03d27144269d6e5cfc90d60628"
-  response = requests.get(url)
-  data = response.json()
-  print("search_term",search_term)
+  # search_term = request.args.get("term").replace(" ","").lower()
+  # url = f"https://newsapi.org/v2/everything?q={search_term}&apiKey=dcfffe03d27144269d6e5cfc90d60628"
+  # response = requests.get(url)
+  # data = response.json()
+  # print("search_term",search_term)
 
-  #shedule update the news
-  if search_term == "cryptocurrency" :
-    return jsonify(data['articles'][:5])
-  else:
-    return jsonify(data['articles'][:3])
+  # #shedule update the news
+  # if search_term == "cryptocurrency" :
+  #   return jsonify(data['articles'][:5])
+  # else:
+  #   return jsonify(data['articles'][:3])
+  pass
   
 
 
-@app.route("/connect-coinbase")
-def connect_coinbase():
+# @app.route("/connect-coinbase")
+# def connect_coinbase():
 
-  url = "https://api.coinbase.com/oauth/token"
+#   url = "https://api.coinbase.com/oauth/token"
 
-  response = requests.post(url, {
-    "grant_type": "authorization_code",
-    "code",
-    "client_id":,
-    "client_secret":,
-    "redirect_uri":
-  })
-  data = response.json()
-  print(data)
-  # return jsonify(data)
-  return "test"
+#   response = requests.post(url, {
+#     "grant_type": "authorization_code",
+#     "client_id":,
+#     "client_secret":,
+#     "redirect_uri":
+#   })
+#   data = response.json()
+#   print(data)
+#   # return jsonify(data)
+#   return "test"
 
 
 if __name__ == "__main__":

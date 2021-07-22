@@ -12,6 +12,12 @@ function TopVolCoinList() {
     });
   }, []);
 
+function handleClick(e) {
+  console.log(e.target.id);
+
+  console.log("test")
+}
+
   return (
     <div>
       <h1>Coinmarketcap clone</h1>
@@ -29,7 +35,9 @@ function TopVolCoinList() {
           {data.map(coin => (
             <tr key={coin.id}>
               <td>
-                <img 
+                <img
+                  onClick={handleClick}
+                  id={coin.id} 
                   src={coin.image} 
                   style={{width: 25, height: 25, marginRight: 10}} 
                 />
