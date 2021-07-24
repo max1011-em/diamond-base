@@ -7,7 +7,7 @@ class User(db.Model):
     """ Store information about each user. """
     
     __tablename__ = "users"
-    # username or email
+
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     full_name = db.Column(db.String,nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
@@ -45,8 +45,6 @@ class UserCoin(db.Model):
     ave_price = db.Column(db.Integer, nullable=True)
     qty = db.Column(db.Integer, nullable=True)
     favorite_coin = db.Column(db.Boolean, nullable=True)
-    # target_price = db.Column(db.Integer, nullable=False)
-
 
     coin = db.relationship("Coin", backref="user_coins")
     user = db.relationship("User",backref="user_coins")
@@ -55,16 +53,32 @@ class UserCoin(db.Model):
         return f"<UserCoin user_coin_id={self.user_coin_id} coin_id={self.coin_id} qty={self.qty}>"
 
 
+class CoinNews(db.Model):
+    """ Store articles about searched coins. """
+
+    __tablename__ = "news"
+
+    news = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    coin_id = db.Column(db.Integer, db.ForeignKey("coins.coin_id"))
+    url = db.Column(db.String, nullable=False)
+    published_date = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=False)
+
+    coin = db.relationship("Coin", backref="coin_news")
+
+    def __repr__(self):
+        return f"<CoinNews coin_id={self.coin_id} title={self.title}>"
+
+
 def connect_to_db(flask_app, db_uri="postgresql:///coins", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
     db.app = flask_app
     db.init_app(flask_app)
-
     print("Connected to the db!")
-
+    
 
 if __name__ == "__main__":
     from server import app

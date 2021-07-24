@@ -8,7 +8,7 @@ import requests
 
 app = Flask(__name__)
 app.secret_key = "dev"
-
+GENERAL_NEWS = []
 
 @app.route("/")
 def homepage():
@@ -138,7 +138,6 @@ def add_user_investment():
   user_email = session["logged_in_user_email"]
   coin_name = request.json.get("coin_name")
   coin_id_name = request.json.get("coin_id_name")
-  print("\n\n\n","idname",coin_id_name,"\n\n\n")
   purchased_date = request.json.get("purchased_date")
   ave_price = float(request.json.get("ave_price"))
   qty = float(request.json.get("qty"))
@@ -230,38 +229,33 @@ def add_favorite_coin():
   return jsonify({"success": True})
 
 
-@app.route("/coin-news")
-def get_coin_news():
-  # search_term = request.args.get("term").replace(" ","").lower()
+@app.route("/add-coin-news", methods=['POST'])
+def add_coin_news():
+  """add searched coin news."""
+
+  # search_term = request.json.get("searchTerm")
+  # coin = crud.get_coin_by_coin_name(search_term)
   # url = f"https://newsapi.org/v2/everything?q={search_term}&apiKey=dcfffe03d27144269d6e5cfc90d60628"
   # response = requests.get(url)
   # data = response.json()
-  # print("search_term",search_term)
+  # coin_news = data['articles'][:3]
 
-  # #shedule update the news
   # if search_term == "cryptocurrency" :
-  #   return jsonify(data['articles'][:5])
-  # else:
-  #   return jsonify(data['articles'][:3])
-  pass
+  #   GENERAL_NEWS.append(data['articles'][:5])
+
   
+  # for news in coin_news:
+  #   crud.create_coin_news(coin, news["url"], news["publishedAt"], news["title"], news["description"])
+
+  return "news added"
 
 
-# @app.route("/connect-coinbase")
-# def connect_coinbase():
+@app.route("/coin-news.json")
+def get_coin_news_json():
+  """Return a JSON response with coin news."""
+  
+  news = crud.get_coin_news_by_coin_id()
 
-#   url = "https://api.coinbase.com/oauth/token"
-
-#   response = requests.post(url, {
-#     "grant_type": "authorization_code",
-#     "client_id":,
-#     "client_secret":,
-#     "redirect_uri":
-#   })
-#   data = response.json()
-#   print(data)
-#   # return jsonify(data)
-#   return "test"
 
 
 if __name__ == "__main__":

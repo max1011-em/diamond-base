@@ -16,6 +16,22 @@ function App() {
         setIsPaperHand(paperHand)
     }
 
+    const handleLogout = (e) => {
+        e.preventDefault();
+    
+        fetch("/logout-process", {
+          method: "POST",
+          body: JSON.stringify({'logout': true}),
+          headers: {
+          'Content-Type': 'application/json'
+        }
+        })
+        .then(res => res.json())
+        .then((result) => {
+          setLogin(result.userLogout)
+        });
+      }
+
     useEffect(() => {
         fetch("/session")
           .then((res) => res.json())
@@ -34,9 +50,18 @@ function App() {
                 activeClassName="navlink-active"
                 className="nav-link">Main</NavLink>
                 <NavLink 
+                to="/prices"
+                activeClassName="navlink-active"
+                className="nav-link">Prices</NavLink>
+                <NavLink 
+                to="/news"
+                activeClassName="navlink-active"
+                className="nav-link">News</NavLink>
+                <NavLink 
                 to="/profile"
                 activeClassName="navlink-active"
                 className="nav-link">Profile</NavLink>
+                <button onClick={handleLogout}>test Logout</button>
                 </header>
                 : null}
             
@@ -50,8 +75,14 @@ function App() {
             <Redirect to="/login"/> : null)
             }
             
-            <Route path="/main">
+            <Route exact path="/main">
                 {userLogin ? <MainContainer getLogout={getLogout}/> :  <Redirect to="/login"/>}     
+            </Route>
+            <Route path="main/:coinName">
+                {/* <CoinGraph coinData={coinInfo}/>
+                <CoinInfo coinInfo={coinInfo}/> */}
+                <CoinNews />
+                {/* <AddFavCoin coin={coinName}/> */}
             </Route>
             <Route exact path="/login">
                 {userLogin? 
@@ -64,9 +95,24 @@ function App() {
             <Route exact path="/signup">
                 <SignupContainer />        
             </Route>
+            <Route exact path="/prices">
+                <TopVolCoinList />          
+            </Route>
+            <Route exact path="/news">
+                <CoinNews />          
+            </Route>
             <Route exact path="/profile">
                 <Profile />          
             </Route>
+
+            
+            {/* <Route exact path={path}>
+                <h1>Your investment</h1>
+                <UserInvestmentContainer />
+                <UserFavCoinContainer />
+                {/* <CoinNews searchTerm={"cryptocurrency"}/> */}
+            {/* </Route> */}
+
         </BrowserRouter>
 
     );

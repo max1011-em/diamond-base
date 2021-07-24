@@ -8,6 +8,7 @@ function calculateChange(curr, currChange) {
 }
 
 function CoinGraph({coinData}) {
+  console.log("in coingraph")
   const canvasRef = useRef();
   
   const currPrice = coinData.market_data.current_price.usd;

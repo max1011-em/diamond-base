@@ -12,6 +12,7 @@ function UserFavCoin({coinName}) {
 }
 
 function AddFavCoin({coin}) {
+  console.log("in addFavoritecoin")
   const coinName = coin;
 
   const handleClick = (e) => {
