@@ -1,4 +1,4 @@
-from model import db, User, Coin, UserCoin, CoinNews, connect_to_db
+from model import db, User, Coin, UserCoin, Article, connect_to_db
 
 
 def create_user(full_name, email, password):
@@ -80,29 +80,36 @@ def get_user_fav_coin_by_user_id(user_id):
                                UserCoin.favorite_coin == True ).all()
 
 
-def create_coin_news(coin, url, published_date, title, description):
+def get_article():
     
-  coin_news = CoinNews(
-      coin=coin,
-      url=url,
-      published_date=published_date,
-      title=title,
-      description=description
-      )
-  db.session.add(coin_news)
-  db.session.commit()
+  return Article.query.all()
 
-  return coin_news
-
-
-def get_coin_news():
+# def create_coin_news(coin, url, published_date, title, description):
     
-  return CoinNews.query.all()
+#   coin_news = CoinNews(
+#       coin=coin,
+#       url=url,
+#       published_date=published_date,
+#       title=title,
+#       description=description
+#       )
+#   db.session.add(coin_news)
+#   db.session.commit()
+
+#   return coin_news
 
 
-def get_coin_news_by_coin_id(coin_id):
+# def get_coin_news():
     
-  return CoinNews.query.filter(CoinNews.coin_id == coin_id).all()
+#   return CoinNews.query.all()
+
+
+# def get_coin_news_by_coin_id(coin_id):
+#     coin_news = CoinNews.query.filter(CoinNews.coin_id == coin_id).all()
+#     if coin_news == None:
+#       return None
+#     else:
+#       return coin_news
 
 
 if __name__ == "__main__":

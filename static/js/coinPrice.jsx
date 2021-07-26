@@ -1,7 +1,7 @@
 const { Route, Switch, useRouteMatch, useHistory } = ReactRouterDOM;
 const { useState } = React;
 
-function TopVolCoinList() {
+function CoinPrice() {
   const history = useHistory();
   const [data, setData] = useState([]);
   const [coinName, setCoinName] = useState("");

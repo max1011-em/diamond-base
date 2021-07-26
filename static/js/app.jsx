@@ -4,33 +4,20 @@ const { Redirect, Route, Link, BrowserRouter, NavLink } = ReactRouterDOM;
 function App() {
     const [userLogin, setLogin] = useState(false);
     const [isPaperHand, setIsPaperHand] = useState("");
+    const [coinName, setCoin] = useState("");
+    const [coinInfo, setInfo] = useState({});
 
     const getLogin = (loginInfo) => {
         setLogin(loginInfo.user_loggedin);
     };
 
-    const getLogout = (logoutInfo) => {
-        setLogin(logoutInfo.userLogout)
-    }
     const getPaperHand = (paperHand) => {
         setIsPaperHand(paperHand)
     }
 
-    const handleLogout = (e) => {
-        e.preventDefault();
-    
-        fetch("/logout-process", {
-          method: "POST",
-          body: JSON.stringify({'logout': true}),
-          headers: {
-          'Content-Type': 'application/json'
-        }
-        })
-        .then(res => res.json())
-        .then((result) => {
-          setLogin(result.userLogout)
-        });
-      }
+    const getLogout = (isLogout) => {
+        setLogin(isLogout)
+    }
 
     useEffect(() => {
         fetch("/session")
@@ -39,30 +26,21 @@ function App() {
             setLogin(result.hasSession)
           });
       }, []);
+      
+      const getCoinName = (coinName) => {
+        setCoin(coinName);
+      };
     
+      const getCoinInfo = (coinInfo) => {
+        setInfo(coinInfo);
+      };
 
     return (  
         <BrowserRouter>
             {userLogin ? 
-                <header>
-                <NavLink 
-                to="/main"
-                activeClassName="navlink-active"
-                className="nav-link">Main</NavLink>
-                <NavLink 
-                to="/prices"
-                activeClassName="navlink-active"
-                className="nav-link">Prices</NavLink>
-                <NavLink 
-                to="/news"
-                activeClassName="navlink-active"
-                className="nav-link">News</NavLink>
-                <NavLink 
-                to="/profile"
-                activeClassName="navlink-active"
-                className="nav-link">Profile</NavLink>
-                <button onClick={handleLogout}>test Logout</button>
-                </header>
+                <Header getLogout={getLogout}
+                        getCoinName={getCoinName}
+                        getCoinInfo={getCoinInfo}/>
                 : null}
             
             <Route exact path="/">
@@ -76,13 +54,13 @@ function App() {
             }
             
             <Route exact path="/main">
-                {userLogin ? <MainContainer getLogout={getLogout}/> :  <Redirect to="/login"/>}     
+                {userLogin ? <MainContainer /> :  <Redirect to="/login"/>}     
             </Route>
-            <Route path="main/:coinName">
-                {/* <CoinGraph coinData={coinInfo}/>
-                <CoinInfo coinInfo={coinInfo}/> */}
-                <CoinNews />
-                {/* <AddFavCoin coin={coinName}/> */}
+            <Route path="/main/:coinName">
+                <CoinGraph coinData={coinInfo}/>
+                <AddFavCoin coinName={coinName}/>
+                <CoinInfo coinInfo={coinInfo}/>
+                <CoinNews coinName={coinName}/>
             </Route>
             <Route exact path="/login">
                 {userLogin? 
@@ -96,23 +74,14 @@ function App() {
                 <SignupContainer />        
             </Route>
             <Route exact path="/prices">
-                <TopVolCoinList />          
+                <CoinPrice />     
             </Route>
             <Route exact path="/news">
-                <CoinNews />          
+                <News />        
             </Route>
             <Route exact path="/profile">
-                <Profile />          
+                <Profile />      
             </Route>
-
-            
-            {/* <Route exact path={path}>
-                <h1>Your investment</h1>
-                <UserInvestmentContainer />
-                <UserFavCoinContainer />
-                {/* <CoinNews searchTerm={"cryptocurrency"}/> */}
-            {/* </Route> */}
-
         </BrowserRouter>
 
     );

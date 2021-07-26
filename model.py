@@ -53,22 +53,43 @@ class UserCoin(db.Model):
         return f"<UserCoin user_coin_id={self.user_coin_id} coin_id={self.coin_id} qty={self.qty}>"
 
 
-class CoinNews(db.Model):
+class CoinArticle(db.Model):
     """ Store articles about searched coins. """
 
-    __tablename__ = "news"
+    __tablename__ = "coin_articles"
 
-    news = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    coin_article_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     coin_id = db.Column(db.Integer, db.ForeignKey("coins.coin_id"))
-    url = db.Column(db.String, nullable=False)
-    published_date = db.Column(db.String, nullable=False)
+    author = db.Column(db.String)
+    url = db.Column(db.String, nullable=False, unique=True)
     title = db.Column(db.String, nullable=False)
-    description = db.Column(db.String, nullable=False)
+    source = db.Column(db.String)
+    image_url = db.Column(db.String)
+    published = db.Column(db.DateTime)
+    description = db.Column(db.String)
 
     coin = db.relationship("Coin", backref="coin_news")
 
     def __repr__(self):
         return f"<CoinNews coin_id={self.coin_id} title={self.title}>"
+
+class Article(db.Model):
+    """ Store articles about cryptocurrency. """
+
+    __tablename__ = "articles"
+
+    article_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    author = db.Column(db.String)
+    url = db.Column(db.String, nullable=False, unique=True)
+    title = db.Column(db.String, nullable=False)
+    source = db.Column(db.String)
+    image_url = db.Column(db.String)
+    published = db.Column(db.DateTime)
+    description = db.Column(db.String)
+
+    def __repr__(self):
+
+        return f"<Article article_id={self.article_id} title={self.title}>"
 
 
 def connect_to_db(flask_app, db_uri="postgresql:///coins", echo=True):

@@ -1,10 +1,11 @@
 """Server for cryptocurrency app."""
-
+import os
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from model import connect_to_db, User, db, connect_to_db, UserCoin
 import crud
+from news_api_functions import *
 import requests
-
+from apikey import NEWS_API_KEY
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -21,6 +22,12 @@ def homepage():
 def route(path):
 
   return render_template("index.html")
+
+
+@app.route("/<path>/<code>")
+def nested_route(path, code):
+
+    return render_template("index.html")
 
 
 @app.route("/login-process", methods=['POST'])
@@ -59,7 +66,7 @@ def process_logout():
     print(session)
 
   return jsonify({
-      "userLogout": False
+      "userLogin": False
   })
 
 
@@ -192,7 +199,7 @@ def get_favorite_coin_json():
     coin = crud.get_coin_by_coin_id(user_coin.coin_id)
     user_favorite_coin = {
         "coinName": coin.coin_name,
-        "userCoinId": user_coin.user_id
+        "coinIdName": coin.coin_id_name
     }
     USER_FAVORITE_COIN.append(user_favorite_coin)
 
@@ -229,13 +236,55 @@ def add_favorite_coin():
   return jsonify({"success": True})
 
 
-@app.route("/add-coin-news", methods=['POST'])
-def add_coin_news():
-  """add searched coin news."""
+@app.route("/coin-news")
+def get_coin_news():
+  """Return searched coin article."""
+  coin_name = request.args.get("name").replace(" ","").lower()
+  news = get_coin_news_articles(coin_name)
 
-  # search_term = request.json.get("searchTerm")
-  # coin = crud.get_coin_by_coin_name(search_term)
-  # url = f"https://newsapi.org/v2/everything?q={search_term}&apiKey=dcfffe03d27144269d6e5cfc90d60628"
+  return jsonify({"articles": news})
+
+
+
+@app.route("/article.json")
+def get_article_json():
+  """Return a JSON response with cryptocurrency article."""
+  articles_db = crud.get_article()
+
+  articles = []
+
+  for article in articles_db:
+    new_article = {
+                    "author": article.author,
+                    "url": article.url,
+                    "title": article.title,
+                    "source": article.source,
+                    "image_url": article.image_url,
+                    "published": article.published,
+                    "description": article.description
+                   }
+    articles.append(new_article)
+  print(articles)
+  return jsonify({"articles": articles})
+
+
+
+if __name__ == "__main__":
+  connect_to_db(app)
+  app.run(host="0.0.0.0", debug=True, use_debugger=True, use_reloader=True)
+
+
+
+# @app.route("/add-coin-news", methods=['POST'])
+# def add_coin_news():
+#   """add searched coin news."""
+
+#   coin_name = request.json.get("coinName")
+#   coin = crud.get_coin_by_coin_name(coin_name)
+#   coin_news = crud.get_coin_news_by_coin_id(coin.coin_id)
+  # print("\n\n\n", coin_news,"\n\n\n")
+
+  # url = f"https://newsapi.org/v2/everything?q={search_term}&apiKey="
   # response = requests.get(url)
   # data = response.json()
   # coin_news = data['articles'][:3]
@@ -247,17 +296,4 @@ def add_coin_news():
   # for news in coin_news:
   #   crud.create_coin_news(coin, news["url"], news["publishedAt"], news["title"], news["description"])
 
-  return "news added"
-
-
-@app.route("/coin-news.json")
-def get_coin_news_json():
-  """Return a JSON response with coin news."""
-  
-  news = crud.get_coin_news_by_coin_id()
-
-
-
-if __name__ == "__main__":
-  connect_to_db(app)
-  app.run(host="0.0.0.0", debug=True, use_debugger=True, use_reloader=True)
+  # return "test"
