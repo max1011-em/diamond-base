@@ -3,7 +3,8 @@ const { useState, useEffect } = React;
 function UserInvestment({holdings}) {
   console.log(holdings)
   const total = holdings.reduce((acc, cur) => {
-    return acc + cur[1]},0); 
+    return acc + cur.total
+  },0); 
 
   return (
     <div>
@@ -13,14 +14,21 @@ function UserInvestment({holdings}) {
       <thead>
         <tr>
           <th>Coin Name</th>
+          <th>Quantity</th>
           <th>Total</th>
         </tr>
       </thead>
       <tbody>
         {holdings.map((coin,i) => (
           <tr key={i}>
-            <td>{coin[0]}</td>
-            <td>{coin[1]}</td>
+            <td>
+            <img
+              src={coin.img} 
+              style={{width: 25, height: 25, marginRight: 10}} 
+            />
+              {coin.coinName}</td>
+            <td>{coin.qty}</td>
+            <td>{coin.total}</td>
           </tr>
         ))}
       </tbody>
@@ -148,10 +156,11 @@ function AddUserInvestment({ handleHistoryUpdate }) {
 
     const formInputs = {
       "coin_name": coinName,
-      "purchased_date":purchsedDate,
-      "init_price": initPrice,
+      "date":purchsedDate,
+      "price": initPrice,
       "qty": qty,
-      "coin_id_name":coinIdName
+      "coin_id_name":coinIdName,
+      "transaction":"Buy"
     };
 
     fetch('/add-investment', {
@@ -204,10 +213,93 @@ function AddUserInvestment({ handleHistoryUpdate }) {
           id="qty"
           />
       </div>
-      <button>submit investment</button>
+      <button>submit</button>
     </form>
   );
 }
+
+function SubtractUserInvestment({ handleHistoryUpdate }) {
+  const [coinName, setCoinName] = useState("");
+  const [sellDate, setSellDate] = useState("");
+  const [sellPrice, setSellPrice] = useState("");
+  const [qty, setQty] = useState("");
+  const [coinIdName, setCoinIdName] = useState("")
+  
+  const getCoinName = (coinName) => {
+    setCoinName(coinName)
+  };
+
+  const getCoinIdName = (coinIdName) => {
+    setCoinIdName(coinIdName)
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formInputs = {
+      "coin_name": coinName,
+      "date":sellDate,
+      "price": sellPrice,
+      "qty": qty,
+      "coin_id_name":coinIdName,
+      "transaction":"Sell"
+    };
+
+    fetch('/add-investment', {
+      method: "POST",
+      body: JSON.stringify(formInputs),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result.success)
+      handleHistoryUpdate();
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Coin Name</label>
+        <AutoCompUserInvestment getCoinName={getCoinName} getCoinIdName={getCoinIdName}/>
+      </div>
+      <div>
+        <label>Sell date</label>
+        <input 
+          type="date"
+          name="date"
+          value={sellDate}
+          onChange={(e) => setSellDate(e.target.value)}
+          id="date"
+          />
+      </div>
+      <div>
+        <label>Sell Price $</label>
+        <input 
+          type="text"
+          name="sellPrice"
+          value={sellPrice}
+          onChange={(e) => setSellPrice(e.target.value)}
+          id="sellPrice"
+          />
+      </div>
+      <div>
+        <label>Quantity</label>
+        <input 
+          type="text"
+          name="qty"
+          value={qty}
+          onChange={(e) => setQty(e.target.value)}
+          id="qty"
+          />
+      </div>
+      <button>submit</button>
+    </form>
+  );
+}
+
 
 function UserInvestmentContainer() {
   // const [userInvestments, setUserInvestment] = useState([]);
@@ -218,10 +310,8 @@ function UserInvestmentContainer() {
     fetch("/investments.json")
       .then((res) => res.json())
       .then((data) => {
-        const holdings = Object.entries(data.user_coin_summary).filter((coin) => {
-          return coin[1] > 0;
-        });
-        setUniqCoin(holdings);
+        console.log("in getinvestinfo", data.holdings)
+        setUniqCoin(data.holdings);
         setTransaction(data.investments)
     });
   } 
@@ -237,8 +327,10 @@ function UserInvestmentContainer() {
   return (
     <div>
       {/* <UserInvestmentGraph userInvestments={userInvestments}/> */}
-      <h1>Add your investment</h1>
+      <h1>Add your Buy</h1>
       <AddUserInvestment handleHistoryUpdate={handleHistoryUpdate}/>
+      <h1>Add your Sell</h1>
+      <SubtractUserInvestment handleHistoryUpdate={handleHistoryUpdate}/>
       <UserInvestment holdings={uniqCoin}/>
     </div>
   )

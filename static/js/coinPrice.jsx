@@ -1,11 +1,7 @@
 const { Route, Switch, useRouteMatch, useHistory } = ReactRouterDOM;
 const { useState,useEffect } = React;
 
-<<<<<<< HEAD:static/js/coinPrice.jsx
 function CoinPrice({getCoinInfo,getCoinName}) {
-=======
-function CoinPrice() {
->>>>>>> 9006b5e996f83d7066dc3bbd0493f1fc443ff926:static/js/topVolCoinList.jsx
   const history = useHistory();
   const [coinPrice, setCoinPrice] = useState([]);
   const coinPriceUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false"

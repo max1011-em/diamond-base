@@ -1,17 +1,6 @@
 const { useState, useEffect, useRef } = React;
 
-<<<<<<< HEAD
 function CoinGraph({coinInfo}) {
-=======
-function calculateChange(curr, currChange) {
-  if (currChange === 0) {
-      return curr;
-  }
-  return currChange > 0 ? curr / (currChange/100) : curr + (curr * (currChange * -1 / 100));
-}
-
-function CoinGraph({coinData}) {
->>>>>>> 9006b5e996f83d7066dc3bbd0493f1fc443ff926
   const canvasRef = useRef();
   const [ historyMarket, setHistoryMarket ] = useState([]);
   const [url, setUrl] = useState(`https://api.coingecko.com/api/v3/coins/${coinInfo.id}/market_chart?vs_currency=usd&days=1&interval=hourly`);

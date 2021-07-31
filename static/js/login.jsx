@@ -24,6 +24,7 @@ function LoginForm({setAppLoginStatus}) {
       .then((res) => res.json())
       .then((result) => {
         setAppLoginStatus(result);
+        localStorage.setItem("login",true);
       });
   };
 

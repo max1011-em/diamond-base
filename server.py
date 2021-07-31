@@ -6,10 +6,7 @@ import crud
 from news_api_functions import *
 import requests
 from apikey import NEWS_API_KEY
-<<<<<<< HEAD
 from sqlalchemy.sql import func
-=======
->>>>>>> 9006b5e996f83d7066dc3bbd0493f1fc443ff926
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -124,19 +121,22 @@ def add_user_investment():
   user_email = session["logged_in_user_email"]
   coin_name = request.json.get("coin_name")
   coin_id_name = request.json.get("coin_id_name")
-  purchased_date = request.json.get("purchased_date")
-  init_price = float(request.json.get("init_price"))
+  date = request.json.get("date")
+  price = float(request.json.get("price"))
   qty = float(request.json.get("qty"))
-  transaction = "Buy"
+  transaction = request.json.get("transaction")
 
   user = crud.get_user_by_email(user_email)
   coin = crud.get_coin_by_coin_name(coin_name)
 
-
+  if transaction == "Sell" :
+    price = -abs(price)
+    qty = -abs(qty)
+    
   crud.create_user_coin(coin,
                         user, 
-                        purchased_date, 
-                        init_price,
+                        date, 
+                        price,
                         qty,
                         transaction
                         )
@@ -151,41 +151,33 @@ def get_investments_json():
   user_email = session["logged_in_user_email"]
   user = crud.get_user_by_email(user_email)
   user_coins = crud.get_user_coin_by_user_id(user.user_id)
-
+  
   user_coin_summary= {}
   USER_COIN_DATA = []
   holdings = []
   
 
-  coin_groupby = db.session.query(UserCoin.coin_id, func.sum(UserCoin.qty)).filter(UserCoin.qty > 0).group_by(UserCoin.coin_id).all()
-  
+  coin_groupby = db.session.query(UserCoin.coin_id, func.sum(UserCoin.qty)).filter((UserCoin.qty > 0)|(UserCoin.qty < 0)).group_by(UserCoin.coin_id).all()
+
   for uniq_coin in coin_groupby:
     coin = crud.get_coin_by_coin_id(uniq_coin[0])
     url = f"https://api.coingecko.com/api/v3/coins/{coin.coin_id_name}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false"
     response = requests.get(url)
     data = response.json()
     uniq_coin_total = uniq_coin[1] * data["market_data"]["current_price"]["usd"]
-    holdings.append({data["name"]: uniq_coin_total})
+    image = data["image"]["large"]
+    # print("\n\n\n",data,"\n\n\n")
+    holdings.append({
+      "coinName":data["name"], 
+      "qty":uniq_coin[1], 
+      "total": uniq_coin_total, 
+      "img":image,
+      "curPrice": data["market_data"]["current_price"]["usd"]
+      })
   
-  print("\n\n\n",holdings,"\n\n\n")
-  # for user_coin in user_coins:
-  #   coin = crud.get_coin_by_coin_id(user_coin.coin_id)
-    
-  #   if user_coin_summary.get(coin.coin_name,""):
-  #     user_coin_summary[coin.coin_name] += user_coin.init_price * user_coin.qty
-  #   else: user_coin_summary[coin.coin_name] = user_coin.init_price * user_coin.qty
+  
 
-  #   user_investment = {
-  #       "coinIdName": coin.coin_id_name,
-  #       "coinName": coin.coin_name,
-  #       "purchasedDate": user_coin.purchased_date,
-  #       "avePrice": user_coin.init_price,
-  #       "qty": user_coin.qty,
-  #       "userCoinId": user_coin.user_id
-  #   }
-  #   USER_COIN_DATA.append(user_investment)
-
-  return jsonify({"investments": USER_COIN_DATA, "user_coin_summary": {"bitcoin":150}})
+  return jsonify({"investments": USER_COIN_DATA, "holdings": holdings})
 
 
 # @app.route("/transaction.json")
@@ -293,10 +285,6 @@ def get_article_json():
                     "description": article.description
                    }
     articles.append(new_article)
-<<<<<<< HEAD
-=======
-  print(articles)
->>>>>>> 9006b5e996f83d7066dc3bbd0493f1fc443ff926
   return jsonify({"articles": articles})
 
 
