@@ -1,10 +1,12 @@
 """Server for cryptocurrency app."""
-
+import os
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import connect_to_db, User, db, connect_to_db, UserCoin
+from model import connect_to_db, User, db, connect_to_db, UserCoin, Coin
 import crud
+from news_api_functions import *
 import requests
-
+from apikey import NEWS_API_KEY
+from sqlalchemy.sql import func
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -21,6 +23,12 @@ def homepage():
 def route(path):
 
   return render_template("index.html")
+
+
+@app.route("/<path>/<code>")
+def nested_route(path, code):
+
+    return render_template("index.html")
 
 
 @app.route("/login-process", methods=['POST'])
@@ -59,7 +67,7 @@ def process_logout():
     print(session)
 
   return jsonify({
-      "userLogout": False
+      "userLogin": False
   })
 
 
@@ -106,31 +114,6 @@ def get_coins_json():
   return jsonify({"coins": COINS})
 
 
-@app.route("/investments.json")
-def get_investments_json():
-  """Return a JSON response with all investments."""
-
-  user_email = session["logged_in_user_email"]
-  user = crud.get_user_by_email(user_email)
-  user_coins = crud.get_user_coin_by_user_id(user.user_id)
-
-  USER_COIN_DATA = []
-
-  for user_coin in user_coins:
-    coin = crud.get_coin_by_coin_id(user_coin.coin_id)
-    user_investment = {
-        "coinIdName": coin.coin_id_name,
-        "coinName": coin.coin_name,
-        "purchasedDate": user_coin.purchased_date,
-        "avePrice": user_coin.ave_price,
-        "qty": user_coin.qty,
-        "userCoinId": user_coin.user_id
-    }
-    USER_COIN_DATA.append(user_investment)
-
-  return jsonify({"investments": USER_COIN_DATA})
-
-
 @app.route("/add-investment", methods=['POST'])
 def add_user_investment():
   """add user investment"""
@@ -139,43 +122,92 @@ def add_user_investment():
   coin_name = request.json.get("coin_name")
   coin_id_name = request.json.get("coin_id_name")
   purchased_date = request.json.get("purchased_date")
-  ave_price = float(request.json.get("ave_price"))
+  init_price = float(request.json.get("init_price"))
   qty = float(request.json.get("qty"))
+  transaction = "Buy"
 
   user = crud.get_user_by_email(user_email)
   coin = crud.get_coin_by_coin_name(coin_name)
-  user_coin = UserCoin.query.filter_by(coin_id=coin.coin_id).first()
 
-  if not user_coin:
-    crud.create_user_coin(coin,
-                          user, 
-                          purchased_date, 
-                          ave_price,
-                          qty
-                          )
-    new_investment = {
-        "coinName": coin_name,
-        "coinIdName": coin_id_name,
-        "purchasedDate": purchased_date,
-        "avePrice": ave_price,
-        "qty": qty
+
+  crud.create_user_coin(coin,
+                        user, 
+                        purchased_date, 
+                        init_price,
+                        qty,
+                        transaction
+                        )
+
+  return jsonify({"success": True})
+
+
+@app.route("/investments.json")
+def get_investments_json():
+  """Return a JSON response with all investments."""
+
+  user_email = session["logged_in_user_email"]
+  user = crud.get_user_by_email(user_email)
+  user_coins = crud.get_user_coin_by_user_id(user.user_id)
+
+  user_coin_summary= {}
+  # [
+  #   {"coinName": "bitcoin", 
+  #   "info": {qty,init_price,total}
+  #   },
+  #   {"coinName": "dogecoin", 
+  #   "info": {qty,init_price,total}
+  #   }
+  #   ]
+  USER_COIN_DATA = []
+  
+  # groupby = UserCoin.query.group_by(user_coins.coin_id).all()
+  # groupby = UserCoin.query(UserCoin.coin_id, func.sum(UserCoin.qty)).group_by(UserCoin.coin_id)
+
+  # print("\n\n\n","groupby",groupby,"\n\n\n")
+
+  for user_coin in user_coins:
+    coin = crud.get_coin_by_coin_id(user_coin.coin_id)
+    
+    if user_coin_summary.get(coin.coin_name,""):
+      user_coin_summary[coin.coin_name] += user_coin.init_price * user_coin.qty
+    else: user_coin_summary[coin.coin_name] = user_coin.init_price * user_coin.qty
+
+    user_investment = {
+        "coinIdName": coin.coin_id_name,
+        "coinName": coin.coin_name,
+        "purchasedDate": user_coin.purchased_date,
+        "avePrice": user_coin.init_price,
+        "qty": user_coin.qty,
+        "userCoinId": user_coin.user_id
     }
-    return jsonify({"success": True, "investmentAdded": new_investment})
+    USER_COIN_DATA.append(user_investment)
 
-  else:
-    user_coin.purchased_date = purchased_date
-    user_coin.ave_price = ave_price
-    user_coin.qty = qty
-    db.session.commit()
-    new_investment = {
-        "coinName": coin_name,
-        "coinIdName": coin_id_name,
-        "purchasedDate": purchased_date,
-        "avePrice": ave_price,
-        "qty": qty
-    }
-    return jsonify({"success": True, "investmentAdded": new_investment})
+  return jsonify({"investments": USER_COIN_DATA, "user_coin_summary": user_coin_summary})
 
+
+# @app.route("/transaction.json")
+# def get_transaction_json():
+#   """Return a JSON response with all transactions."""
+
+#   user_email = session["logged_in_user_email"]
+#   user = crud.get_user_by_email(user_email)
+#   user_coins = crud.get_user_coin_by_user_id(user.user_id)
+
+#   user_transaction = [
+#     {"bitcoin":[all the transaciton]}
+#     ]
+
+#   for user_coin in user_coins:
+#     coin = crud.get_coin_by_coin_id(user_coin.coin_id)
+
+#     if user_coin_summary.get(coin.coin_name,""):
+#       user_coin_summary[coin.coin_name] += user_coin.init_price * user_coin.qty
+#     else: user_coin_summary[coin.coin_name] = user_coin.init_price * user_coin.qty
+
+    
+#     USER_COIN_DATA.append(user_investment)
+
+#   return jsonify({"transaction": USER_TRANSACTION})
 
 
 @app.route("/favorite-coin.json")
@@ -192,7 +224,7 @@ def get_favorite_coin_json():
     coin = crud.get_coin_by_coin_id(user_coin.coin_id)
     user_favorite_coin = {
         "coinName": coin.coin_name,
-        "userCoinId": user_coin.user_id
+        "coinIdName": coin.coin_id_name
     }
     USER_FAVORITE_COIN.append(user_favorite_coin)
 
@@ -229,13 +261,54 @@ def add_favorite_coin():
   return jsonify({"success": True})
 
 
-@app.route("/add-coin-news", methods=['POST'])
-def add_coin_news():
-  """add searched coin news."""
+@app.route("/coin-news")
+def get_coin_news():
+  """Return searched coin article."""
+  coin_name = request.args.get("name").replace(" ","").lower()
+  news = get_coin_news_articles(coin_name)
 
-  # search_term = request.json.get("searchTerm")
-  # coin = crud.get_coin_by_coin_name(search_term)
-  # url = f"https://newsapi.org/v2/everything?q={search_term}&apiKey=dcfffe03d27144269d6e5cfc90d60628"
+  return jsonify({"articles": news})
+
+
+
+@app.route("/article.json")
+def get_article_json():
+  """Return a JSON response with cryptocurrency article."""
+  articles_db = crud.get_article()
+
+  articles = []
+
+  for article in articles_db:
+    new_article = {
+                    "author": article.author,
+                    "url": article.url,
+                    "title": article.title,
+                    "source": article.source,
+                    "image_url": article.image_url,
+                    "published": article.published,
+                    "description": article.description
+                   }
+    articles.append(new_article)
+  return jsonify({"articles": articles})
+
+
+
+if __name__ == "__main__":
+  connect_to_db(app)
+  app.run(host="0.0.0.0", debug=True, use_debugger=True, use_reloader=True)
+
+
+
+# @app.route("/add-coin-news", methods=['POST'])
+# def add_coin_news():
+#   """add searched coin news."""
+
+#   coin_name = request.json.get("coinName")
+#   coin = crud.get_coin_by_coin_name(coin_name)
+#   coin_news = crud.get_coin_news_by_coin_id(coin.coin_id)
+  # print("\n\n\n", coin_news,"\n\n\n")
+
+  # url = f"https://newsapi.org/v2/everything?q={search_term}&apiKey="
   # response = requests.get(url)
   # data = response.json()
   # coin_news = data['articles'][:3]
@@ -247,17 +320,4 @@ def add_coin_news():
   # for news in coin_news:
   #   crud.create_coin_news(coin, news["url"], news["publishedAt"], news["title"], news["description"])
 
-  return "news added"
-
-
-@app.route("/coin-news.json")
-def get_coin_news_json():
-  """Return a JSON response with coin news."""
-  
-  news = crud.get_coin_news_by_coin_id()
-
-
-
-if __name__ == "__main__":
-  connect_to_db(app)
-  app.run(host="0.0.0.0", debug=True, use_debugger=True, use_reloader=True)
+  # return "test"

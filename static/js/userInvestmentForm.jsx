@@ -1,25 +1,26 @@
 const { useState, useEffect } = React;
 
-function UserInvestment({data}) {
+function UserInvestment({holdings}) {
+  console.log(holdings)
+  const total = holdings.reduce((acc, cur) => {
+    return acc + cur[1]},0); 
+
   return (
     <div>
     <h1>Your coin list</h1> 
+    <h3>Total: ${total}</h3>
     <table>
       <thead>
         <tr>
           <th>Coin Name</th>
-          <th>Purchase Date</th>
-          <th>Average Price</th>
-          <th>Quantity</th>
+          <th>Total</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((coin,i) => (
+        {holdings.map((coin,i) => (
           <tr key={i}>
-            <td>{coin.coinName}</td>
-            <td>{coin.purchasedDate}</td>
-            <td>${coin.avePrice}</td>
-            <td>{coin.qty}</td>
+            <td>{coin[0]}</td>
+            <td>{coin[1]}</td>
           </tr>
         ))}
       </tbody>
@@ -28,7 +29,7 @@ function UserInvestment({data}) {
   );
 }
 
-function AutoCompUserCoin({getCoinName,getCoinIdName}) {
+function AutoCompUserInvestment({getCoinName,getCoinIdName}) {
   const [active, setActive] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const [filtered, setFiltered] = useState([]);
@@ -127,10 +128,10 @@ function AutoCompUserCoin({getCoinName,getCoinIdName}) {
   );
 }
 
-function AddUserInvestment({addInvestment}) {
+function AddUserInvestment({ handleHistoryUpdate }) {
   const [coinName, setCoinName] = useState("");
   const [purchsedDate, setDate] = useState("");
-  const [avePrice, setAvePrice] = useState("");
+  const [initPrice, setInitPrice] = useState("");
   const [qty, setQty] = useState("");
   const [coinIdName, setCoinIdName] = useState("")
   
@@ -148,7 +149,7 @@ function AddUserInvestment({addInvestment}) {
     const formInputs = {
       "coin_name": coinName,
       "purchased_date":purchsedDate,
-      "ave_price": avePrice,
+      "init_price": initPrice,
       "qty": qty,
       "coin_id_name":coinIdName
     };
@@ -162,8 +163,8 @@ function AddUserInvestment({addInvestment}) {
     })
     .then((res) => res.json())
     .then((result) => {
-      const {investmentAdded: { coinName, coinIdName, purchasedDate, avePrice, qty},} = result;
-      addInvestment(coinName, coinIdName, purchasedDate, avePrice, qty)
+      console.log(result.success)
+      handleHistoryUpdate();
     });
   };
 
@@ -171,7 +172,7 @@ function AddUserInvestment({addInvestment}) {
     <form onSubmit={handleSubmit}>
       <div>
         <label>Coin Name</label>
-        <AutoCompUserCoin getCoinName={getCoinName} getCoinIdName={getCoinIdName}/>
+        <AutoCompUserInvestment getCoinName={getCoinName} getCoinIdName={getCoinIdName}/>
       </div>
       <div>
         <label>Purchased date</label>
@@ -184,13 +185,13 @@ function AddUserInvestment({addInvestment}) {
           />
       </div>
       <div>
-        <label>Average Price $</label>
+        <label>Initial Price $</label>
         <input 
           type="text"
-          name="aveprice"
-          value={avePrice}
-          onChange={(e) => setAvePrice(e.target.value)}
-          id="aveprice"
+          name="initprice"
+          value={initPrice}
+          onChange={(e) => setInitPrice(e.target.value)}
+          id="initprice"
           />
       </div>
       <div>
@@ -209,41 +210,36 @@ function AddUserInvestment({addInvestment}) {
 }
 
 function UserInvestmentContainer() {
-  const [userInvestments, setUserInvestment] = useState([]);
+  // const [userInvestments, setUserInvestment] = useState([]);
+  const [transaction, setTransaction] = useState([]);
+  const [uniqCoin, setUniqCoin] = useState([]);
 
-  const addInvestment = (coinName, coinIdName, purchasedDate, avePrice, qty) => {
-    const newInvestment = {coinName, coinIdName, purchasedDate, avePrice, qty};
-    const curInvestment = [...userInvestments];
-    setUserInvestment([...curInvestment, newInvestment]);
-  }
-
-  useEffect(() => {
+  const getInvestmentInfo = () => {
     fetch("/investments.json")
       .then((res) => res.json())
       .then((data) => {
-        setUserInvestment(data.investments);
-      });
+        const holdings = Object.entries(data.user_coin_summary).filter((coin) => {
+          return coin[1] > 0;
+        });
+        setUniqCoin(holdings);
+        setTransaction(data.investments)
+    });
+  } 
+
+  useEffect(() => {
+    getInvestmentInfo();
   }, []);
-
-  const data= userInvestments.filter((curInvestment,i) => {
-    return curInvestment.qty > 0;
-    // if (curInvestment.qty > 0) {
-    //   return <UserInvestment 
-    //       key={i}
-    //       coinName={curInvestment.coinName}
-    //       purchasedDate={curInvestment.purchasedDate}
-    //       avePrice={curInvestment.avePrice}
-    //       qty={curInvestment.qty}
-    //       />
-    // }
-  });
-
+ 
+  const handleHistoryUpdate= () => {
+    getInvestmentInfo();
+  }
+  
   return (
     <div>
-      <UserInvestmentGraph userInvestments={userInvestments}/>
+      {/* <UserInvestmentGraph userInvestments={userInvestments}/> */}
       <h1>Add your investment</h1>
-      <AddUserInvestment addInvestment={addInvestment} />
-      <UserInvestment data={data}/>
+      <AddUserInvestment handleHistoryUpdate={handleHistoryUpdate}/>
+      <UserInvestment holdings={uniqCoin}/>
     </div>
   )
 }

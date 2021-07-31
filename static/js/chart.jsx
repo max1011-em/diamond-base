@@ -1,55 +1,65 @@
 const { useState, useEffect, useRef } = React;
 
-function calculateChange(curr, currChange) {
-  if (currChange === 0) {
-      return curr;
-  }
-  return currChange > 0 ? curr / (currChange/100) : curr + (curr * (currChange * -1 / 100));
-}
-
-function CoinGraph({coinData}) {
-  console.log("in coingraph")
+function CoinGraph({coinInfo}) {
   const canvasRef = useRef();
-  
-  const currPrice = coinData.market_data.current_price.usd;
-  const change24h = calculateChange(currPrice, coinData.market_data.price_change_percentage_24h);
-  const change7d = calculateChange(currPrice, coinData.market_data.price_change_percentage_7d);
-  const change30d = calculateChange(currPrice, coinData.market_data.price_change_percentage_30d);
-  const change200d = calculateChange(currPrice, coinData.market_data.price_change_percentage_200d);
-  const change1y = calculateChange(currPrice, coinData.market_data.price_change_percentage_1y);
-  
-  console.log("24",coinData.market_data.price_change_percentage_24h)
-  console.log("7d",coinData.market_data.price_change_percentage_7d)
-  console.log("30d",coinData.market_data.price_change_percentage_30d)
-  console.log("200d",coinData.market_data.price_change_percentage_200d)
-  console.log("1y",coinData.market_data.price_change_percentage_1y)
-  console.log(currPrice,change24h,change7d,change30d,change200d,change1y)
-  // var ctx = document.getElementById('myChart').getContext('2d');
+  const [ historyMarket, setHistoryMarket ] = useState([]);
+  const [url, setUrl] = useState(`https://api.coingecko.com/api/v3/coins/${coinInfo.id}/market_chart?vs_currency=usd&days=1&interval=hourly`);
+
+  useEffect(() => {
+    fetch(url)
+      .then(response => response.json())
+      .then(price => {
+        setHistoryMarket(price.prices);
+      });
+    }, [url]);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    let url;
+    const days = e.target.innerText.replace(/\D/g, "");
+    days === '24'? 
+    url = `https://api.coingecko.com/api/v3/coins/${coinInfo.id}/market_chart?vs_currency=usd&days=1&interval=hourly` :
+    url = `https://api.coingecko.com/api/v3/coins/${coinInfo.id}/market_chart?vs_currency=usd&days=${days}&interval=daily`;
+    setUrl(url);
+  };
+
+  let label = Array(historyMarket.length).fill("");
+
   useEffect(() => {
     new Chart(canvasRef.current.getContext('2d'), {
       type: 'line',
       data: {
-          labels: ['1Y', '200D', '30D', '7D', '1D', 'Current Price'],
+          labels: label,
           datasets: [{
-              label: coinData.name,
-              data: [change1y, change200d, change30d, change7d, change24h, currPrice],
+              label: "Dogecoin",
+              data: historyMarket.map((price) => price[1]),
               fill: false,
               borderColor: 'rgb(75, 192, 192)',
               tension: 0.1
           }]
       },
       options: {
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        elements: {
+          point:{
+              radius: 1
           }
       }
+    }
   });
-  },[coinData])
+  },[historyMarket])
   
   return (
     <div id="coinContainer">
+      <button onClick={handleClick}>24h</button>
+      <button onClick={handleClick}>7d</button>
+      <button onClick={handleClick}>30d</button>
+      <button onClick={handleClick}>90d</button>
+      <button onClick={handleClick}>365d</button>
       <canvas ref={canvasRef} id="myChart" width="500" height="500"></canvas>
     </div>
   )
@@ -105,3 +115,5 @@ function UserInvestmentGraph({userInvestments}) {
     </div>
   )
 };
+
+

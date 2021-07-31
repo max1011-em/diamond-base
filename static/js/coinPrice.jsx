@@ -1,19 +1,17 @@
 const { Route, Switch, useRouteMatch, useHistory } = ReactRouterDOM;
-const { useState } = React;
+const { useState,useEffect } = React;
 
-function TopVolCoinList() {
+function CoinPrice({getCoinInfo,getCoinName}) {
   const history = useHistory();
-  const [data, setData] = useState([]);
-  const [coinName, setCoinName] = useState("");
-  const [coinInfo, setInfo] = useState({});
-  const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false"
+  const [coinPrice, setCoinPrice] = useState([]);
+  const coinPriceUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false"
 
 
   useEffect(() => {
-  fetch(url)
+  fetch(coinPriceUrl)
     .then(response => response.json())
-    .then(data => {
-      setData(data);
+    .then(coinPrice => {
+      setCoinPrice(coinPrice);
     });
   }, []);
 
@@ -23,10 +21,10 @@ function TopVolCoinList() {
 
     fetch(coinUrl)
       .then(response => response.json())
-      .then(data => {
-        setInfo(data)
-        setCoinName(data.name)
-        history.push(`/main/${data.name}`)
+      .then(coinInfo => {
+        getCoinInfo(coinInfo)
+        getCoinName(coinInfo.name)
+        history.push({pathname:`/main/${coinId}`, state:{coinInfo}})
       });
   }
 
@@ -48,7 +46,7 @@ function TopVolCoinList() {
           </tr>
         </thead>
         <tbody>
-          {data.map((coin,i) => (
+          {coinPrice.map((coin,i) => (
             <tr key={coin.id}>
               <td>{i+1}</td>
               <td id={coin.id} onClick={handleClick}>

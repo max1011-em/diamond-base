@@ -30,7 +30,7 @@ function LoginForm({setAppLoginStatus}) {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <h1>Welcome to "  " </h1>
+        <h1>Welcome to Diamond Hands </h1>
         <label>User name</label>
         <input 
           type="text" 

@@ -2,7 +2,7 @@ const { Redirect, Route, Link, BrowserRouter, useHistory } = ReactRouterDOM;
 const { useState, useEffect, useRef } = React;
 
 function CoinInfo({coinInfo}) {
-  console.log("in coinInfo")
+  console.log(coinInfo)
   const coinName = coinInfo.name;
   const image = coinInfo.image.small;
   const currentPrice = coinInfo.market_data.current_price.usd;
@@ -32,7 +32,7 @@ function CoinInfo({coinInfo}) {
   )
 }
 
-function Auto(props) {
+function CoinSearchForm(props) {
 
   const [active, setActive] = useState(0);
   const [isShow, setIsShow] = useState(false);
@@ -124,9 +124,9 @@ function Auto(props) {
     e.preventDefault();
     fetch(url)
     .then(response => response.json())
-    .then(data => {
+    .then(coinInfo => {
       getCoinName(input)
-      getCoinInfo(data)
+      getCoinInfo(coinInfo)
       history.push(`/main/${input}`)
     });
   }
