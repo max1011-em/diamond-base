@@ -150,39 +150,39 @@ def get_investments_json():
   user_coins = crud.get_user_coin_by_user_id(user.user_id)
 
   user_coin_summary= {}
-  # [
-  #   {"coinName": "bitcoin", 
-  #   "info": {qty,init_price,total}
-  #   },
-  #   {"coinName": "dogecoin", 
-  #   "info": {qty,init_price,total}
-  #   }
-  #   ]
   USER_COIN_DATA = []
+  holdings = []
   
-  # groupby = UserCoin.query.group_by(user_coins.coin_id).all()
-  # groupby = UserCoin.query(UserCoin.coin_id, func.sum(UserCoin.qty)).group_by(UserCoin.coin_id)
 
-  # print("\n\n\n","groupby",groupby,"\n\n\n")
-
-  for user_coin in user_coins:
-    coin = crud.get_coin_by_coin_id(user_coin.coin_id)
+  coin_groupby = db.session.query(UserCoin.coin_id, func.sum(UserCoin.qty)).filter(UserCoin.qty > 0).group_by(UserCoin.coin_id).all()
+  
+  for uniq_coin in coin_groupby:
+    coin = crud.get_coin_by_coin_id(uniq_coin[0])
+    url = f"https://api.coingecko.com/api/v3/coins/{coin.coin_id_name}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false"
+    response = requests.get(url)
+    data = response.json()
+    uniq_coin_total = uniq_coin[1] * data["market_data"]["current_price"]["usd"]
+    holdings.append({data["name"]: uniq_coin_total})
+  
+  print("\n\n\n",holdings,"\n\n\n")
+  # for user_coin in user_coins:
+  #   coin = crud.get_coin_by_coin_id(user_coin.coin_id)
     
-    if user_coin_summary.get(coin.coin_name,""):
-      user_coin_summary[coin.coin_name] += user_coin.init_price * user_coin.qty
-    else: user_coin_summary[coin.coin_name] = user_coin.init_price * user_coin.qty
+  #   if user_coin_summary.get(coin.coin_name,""):
+  #     user_coin_summary[coin.coin_name] += user_coin.init_price * user_coin.qty
+  #   else: user_coin_summary[coin.coin_name] = user_coin.init_price * user_coin.qty
 
-    user_investment = {
-        "coinIdName": coin.coin_id_name,
-        "coinName": coin.coin_name,
-        "purchasedDate": user_coin.purchased_date,
-        "avePrice": user_coin.init_price,
-        "qty": user_coin.qty,
-        "userCoinId": user_coin.user_id
-    }
-    USER_COIN_DATA.append(user_investment)
+  #   user_investment = {
+  #       "coinIdName": coin.coin_id_name,
+  #       "coinName": coin.coin_name,
+  #       "purchasedDate": user_coin.purchased_date,
+  #       "avePrice": user_coin.init_price,
+  #       "qty": user_coin.qty,
+  #       "userCoinId": user_coin.user_id
+  #   }
+  #   USER_COIN_DATA.append(user_investment)
 
-  return jsonify({"investments": USER_COIN_DATA, "user_coin_summary": user_coin_summary})
+  return jsonify({"investments": USER_COIN_DATA, "user_coin_summary": {"bitcoin":150}})
 
 
 # @app.route("/transaction.json")
@@ -253,7 +253,8 @@ def add_favorite_coin():
                                     user, 
                                     None, 
                                     None,
-                                    0
+                                    0,
+                                    None
                                     )
 
   user_coin.favorite_coin = True

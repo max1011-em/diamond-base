@@ -35,9 +35,64 @@ function App() {
       const getCoinInfo = (coinInfo) => {
         setCoinInfo(coinInfo);
       };
-    console.log("login", userLogin)
+
     return (  
-    <>
+        <BrowserRouter>
+            {userLogin ? 
+                <Header getLogout={getLogout}
+                        getCoinName={getCoinName}
+                        getCoinInfo={getCoinInfo}/>
+                : null}
+            
+            <Route exact path="/">
+                <Homepage getPaperHand={getPaperHand}/>
+            </Route>
+
+            {isPaperHand ==="Yes" ? 
+              <Redirect to="/block"/>
+            : (isPaperHand === "No"?
+            <Redirect to="/login"/> : null)
+            }
+            
+            <Route exact path="/main">
+                {userLogin ? <MainContainer /> :  <Redirect to="/login"/>}     
+            </Route>
+            <Route path="/main/:coinId">
+                <CoinInfoRender coinName={coinName} coinInfo={coinInfo}/>
+            </Route>
+            <Route exact path="/login">
+                {userLogin? 
+                <Redirect to="/main"/> 
+                :  <LoginContainer getLogin={getLogin} />}     
+            </Route>
+            <Route exact path="/block">
+                <BlockUser />
+            </Route>
+            <Route exact path="/signup">
+                <SignupContainer />        
+            </Route>
+            <Route exact path="/prices">
+                 {userLogin ? <CoinPrice getCoinInfo={getCoinInfo} getCoinName={getCoinName}/>  
+                 :  <Redirect to="/login"/>}    
+                   
+            </Route>
+            <Route exact path="/exchange">      
+                {userLogin ? <CoinExchange /> :  <Redirect to="/login"/>}     
+            </Route>
+            <Route exact path="/news">
+                {userLogin ? <News /> :  <Redirect to="/login"/>}        
+            </Route>
+            <Route exact path="/transaction">
+                {userLogin ? <Transaction />  :  <Redirect to="/login"/>}      
+            </Route>
+        </BrowserRouter>
+
+    );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+{/* <>
     {userLogin? 
         <BrowserRouter>
             <Header getLogout={getLogout}
@@ -50,7 +105,6 @@ function App() {
         <Route path="/main/:coinId">
             <CoinInfoRender coinName={coinName} coinInfo={coinInfo}/>
         </Route>
-        
         <Route exact path="/prices">
              <CoinPrice getCoinInfo={getCoinInfo} getCoinName={getCoinName}/>         
         </Route>
@@ -79,7 +133,7 @@ function App() {
         <Redirect to="/login"/> : null)
         }
         <Route exact path="/login">
-            <LoginContainer />      
+            <LoginContainer getLogin={getLogin} />      
         </Route>
         
         <Route exact path="/signup">
@@ -88,6 +142,4 @@ function App() {
      </BrowserRouter>}
     </>
     );
-}
-
-ReactDOM.render(<App />, document.getElementById('root'));
+} */}
