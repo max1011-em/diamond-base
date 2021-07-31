@@ -6,7 +6,10 @@ import crud
 from news_api_functions import *
 import requests
 from apikey import NEWS_API_KEY
+<<<<<<< HEAD
 from sqlalchemy.sql import func
+=======
+>>>>>>> 9006b5e996f83d7066dc3bbd0493f1fc443ff926
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -290,6 +293,10 @@ def get_article_json():
                     "description": article.description
                    }
     articles.append(new_article)
+<<<<<<< HEAD
+=======
+  print(articles)
+>>>>>>> 9006b5e996f83d7066dc3bbd0493f1fc443ff926
   return jsonify({"articles": articles})
 
 

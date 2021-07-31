@@ -2,7 +2,10 @@ const { Redirect, Route, Link, BrowserRouter, useHistory } = ReactRouterDOM;
 const { useState, useEffect, useRef } = React;
 
 function CoinInfo({coinInfo}) {
+<<<<<<< HEAD:static/js/coinSearchForm.jsx
   console.log(coinInfo)
+=======
+>>>>>>> 9006b5e996f83d7066dc3bbd0493f1fc443ff926:static/js/autoCoinSearch.jsx
   const coinName = coinInfo.name;
   const image = coinInfo.image.small;
   const currentPrice = coinInfo.market_data.current_price.usd;
