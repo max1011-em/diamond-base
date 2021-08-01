@@ -43,5 +43,15 @@
   "id": "0-5x-long-bitcoin-token",
   "symbol": "half",
   "name": "0.5X Long Bitcoin Token"
+},
+{
+  "id": "ethereum",
+  "symbol": "eth",
+  "name": "Ethereum"
+},
+{
+  "id": "ethereum-classic",
+  "symbol": "etc",
+  "name": "Ethereum Classic"
 }
 ]

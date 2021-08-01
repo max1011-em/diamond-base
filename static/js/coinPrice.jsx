@@ -5,7 +5,7 @@ function CoinPrice({getCoinInfo,getCoinName}) {
   const history = useHistory();
   const [coinPrice, setCoinPrice] = useState([]);
   const coinPriceUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false"
-
+  console.log(coinPrice)
 
   useEffect(() => {
   fetch(coinPriceUrl)
@@ -16,7 +16,7 @@ function CoinPrice({getCoinInfo,getCoinName}) {
   }, []);
 
   const handleClick = (e) => {
-    const coinId = e.target.id;
+    const coinId = e.currentTarget.dataset.id;
     const coinUrl = `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`;
 
     fetch(coinUrl)
@@ -47,9 +47,9 @@ function CoinPrice({getCoinInfo,getCoinName}) {
         </thead>
         <tbody>
           {coinPrice.map((coin,i) => (
-            <tr key={coin.id}>
+            <tr key={coin.id} data-id={coin.id} onClick={handleClick}>
               <td>{i+1}</td>
-              <td id={coin.id} onClick={handleClick}>
+              <td id={coin.id} >
                 <img
                   src={coin.image} 
                   style={{width: 25, height: 25, marginRight: 10}} 

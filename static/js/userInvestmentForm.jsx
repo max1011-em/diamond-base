@@ -3,7 +3,7 @@ const { useState, useEffect } = React;
 function UserInvestment({holdings}) {
   console.log(holdings)
   const total = holdings.reduce((acc, cur) => {
-    return acc + cur.total
+    return acc + cur.equity
   },0); 
 
   return (
@@ -15,7 +15,7 @@ function UserInvestment({holdings}) {
         <tr>
           <th>Coin Name</th>
           <th>Quantity</th>
-          <th>Total</th>
+          <th>Equity</th>
         </tr>
       </thead>
       <tbody>
@@ -28,7 +28,7 @@ function UserInvestment({holdings}) {
             />
               {coin.coinName}</td>
             <td>{coin.qty}</td>
-            <td>{coin.total}</td>
+            <td>${coin.equity}</td>
           </tr>
         ))}
       </tbody>
@@ -327,9 +327,9 @@ function UserInvestmentContainer() {
   return (
     <div>
       {/* <UserInvestmentGraph userInvestments={userInvestments}/> */}
-      <h1>Add your Buy</h1>
+      <h1>Add Buy</h1>
       <AddUserInvestment handleHistoryUpdate={handleHistoryUpdate}/>
-      <h1>Add your Sell</h1>
+      <h1>Add Sell</h1>
       <SubtractUserInvestment handleHistoryUpdate={handleHistoryUpdate}/>
       <UserInvestment holdings={uniqCoin}/>
     </div>

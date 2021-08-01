@@ -44,6 +44,7 @@ class UserCoin(db.Model):
     purchased_date = db.Column(db.DateTime, nullable=True)
     init_price = db.Column(db.Float, nullable=True)
     qty = db.Column(db.Float, nullable=True)
+    total = db.Column(db.Float, nullable=True)
     transaction = db.Column(db.String, nullable=True)
     favorite_coin = db.Column(db.Boolean, nullable=True)
 

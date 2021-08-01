@@ -6,6 +6,7 @@ function App() {
     const [isPaperHand, setIsPaperHand] = useState("");
     const [coinName, setCoinName] = useState("");
     const [coinInfo, setCoinInfo] = useState({});
+    const [transHistory, setTransHistory] = useState([]);
 
     const getLogin = (loginInfo) => {
         setLogin(loginInfo.user_loggedin);
@@ -23,19 +24,22 @@ function App() {
         fetch("/session")
           .then((res) => res.json())
           .then((result) => {
-              console.log(result)
             setLogin(result.hasSession)
           });
       }, []);
       
-      const getCoinName = (coinName) => {
-        setCoinName(coinName);
-      };
-    
-      const getCoinInfo = (coinInfo) => {
-        setCoinInfo(coinInfo);
-      };
+    const getCoinName = (coinName) => {
+    setCoinName(coinName);
+    };
 
+    const getCoinInfo = (coinInfo) => {
+    setCoinInfo(coinInfo);
+    };
+
+    const getTransHistory = (history) => {
+        setTransHistory(history);
+      }
+    
     return (  
    <BrowserRouter>
     {userLogin ? 
@@ -60,6 +64,9 @@ function App() {
     <Route path="/main/:coinId">
         <CoinInfoRender coinName={coinName} coinInfo={coinInfo}/>
     </Route>
+    <Route path="/transaction/:coinSym">
+        <TransactionHistory transHistory={transHistory}/>
+    </Route>
     <Route exact path="/login">
         {userLogin? 
         <Redirect to="/main"/> 
@@ -83,7 +90,8 @@ function App() {
         {userLogin ? <News /> :  <Redirect to="/login"/>}        
     </Route>
     <Route exact path="/transaction">
-        {userLogin ? <TransactionContainer />  :  <Redirect to="/login"/>}      
+        {userLogin ? <TransactionContainer getTransHistory={getTransHistory}/>  
+        :  <Redirect to="/login"/>}      
     </Route>
 </BrowserRouter>
     );
