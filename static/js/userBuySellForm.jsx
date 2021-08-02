@@ -1,7 +1,6 @@
 const { useState, useEffect } = React;
 
-function UserInvestment({holdings}) {
-  console.log(holdings)
+function UserInvestmentList({holdings}) {
   const total = holdings.reduce((acc, cur) => {
     return acc + cur.equity
   },0); 
@@ -136,7 +135,7 @@ function AutoCompUserInvestment({getCoinName,getCoinIdName}) {
   );
 }
 
-function AddUserInvestment({ handleHistoryUpdate }) {
+function BuyForm({ handleHistoryUpdate }) {
   const [coinName, setCoinName] = useState("");
   const [purchsedDate, setDate] = useState("");
   const [initPrice, setInitPrice] = useState("");
@@ -218,7 +217,7 @@ function AddUserInvestment({ handleHistoryUpdate }) {
   );
 }
 
-function SubtractUserInvestment({ handleHistoryUpdate }) {
+function SellForm({ handleHistoryUpdate }) {
   const [coinName, setCoinName] = useState("");
   const [sellDate, setSellDate] = useState("");
   const [sellPrice, setSellPrice] = useState("");
@@ -310,7 +309,6 @@ function UserInvestmentContainer() {
     fetch("/investments.json")
       .then((res) => res.json())
       .then((data) => {
-        console.log("in getinvestinfo", data.holdings)
         setUniqCoin(data.holdings);
         setTransaction(data.investments)
     });
@@ -328,10 +326,10 @@ function UserInvestmentContainer() {
     <div>
       {/* <UserInvestmentGraph userInvestments={userInvestments}/> */}
       <h1>Add Buy</h1>
-      <AddUserInvestment handleHistoryUpdate={handleHistoryUpdate}/>
+      <BuyForm handleHistoryUpdate={handleHistoryUpdate}/>
       <h1>Add Sell</h1>
-      <SubtractUserInvestment handleHistoryUpdate={handleHistoryUpdate}/>
-      <UserInvestment holdings={uniqCoin}/>
+      <SellForm handleHistoryUpdate={handleHistoryUpdate}/>
+      <UserInvestmentList holdings={uniqCoin}/>
     </div>
   )
 }

@@ -7,7 +7,7 @@ function Transaction({holdings, getTransaction}) {
   const total = holdings.reduce((acc, cur) => {
     return acc + cur.equity
   },0); 
-
+ 
   const handleClick = (coin) => {
     const coinSymbol = coin.sym;
     fetch(`/transaction.json?sym=${coinSymbol}`)
@@ -54,6 +54,7 @@ function Transaction({holdings, getTransaction}) {
         ))}
       </tbody>
     </table>
+    <TransactionGraph holding={holdings}/>
     </div>
   );
 }
@@ -82,6 +83,8 @@ function TransactionHistory({transHistory}) {
             <td>{coin.qty}</td>
             <td>{coin.date}</td>
             <td>${coin.cost}</td>
+            <td><button>Edit</button></td>
+            <td><button>Delete</button></td>
           </tr>
         ))}
       </tbody>
