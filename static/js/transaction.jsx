@@ -69,7 +69,7 @@ function TransactionHistory({history,transCoinName}) {
   },[]);
 
   const handleRemove = (coin) => {
-    let delTransaction = transHistory.filter((trans) => trans.userCoinId !== coin.userCoinId);
+    const delTransaction = transHistory.filter((trans) => trans.userCoinId !== coin.userCoinId);
     setTransHistory(delTransaction);
 
     fetch('/remove-transaction', {
@@ -106,7 +106,7 @@ function TransactionHistory({history,transCoinName}) {
             <td>{coin.qty}</td>
             <td>{coin.date}</td>
             <td>${coin.cost}</td>
-            <td><button onClick={() => handleRemove(coin)}>Delete</button></td>
+            <td><button onClick={() => handleRemove(coin)}>Remove</button></td>
           </tr>
         ))}
       </tbody>

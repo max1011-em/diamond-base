@@ -14,7 +14,7 @@ function AddFavCoin({coinName}) {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log("addFavCoin function")
+        console.log(result)
       });
   }
 
@@ -25,55 +25,6 @@ function AddFavCoin({coinName}) {
 
   )
 };
-
-function UserFavCoin({fav_coin}) {
-const [result, setResult] = useState([])
-
-useEffect(() => {
-  async function awaitForEach () {
-    const arr = [];
-    for (const coin of fav_coin) {
-      const coinUrl = `https://api.coingecko.com/api/v3/coins/${coin.coinIdName}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`;
-      const data = await fetch(coinUrl);
-      const res = await data.json();
-      arr.push(res);
-    }
-    setResult(arr);
-  }
-
-  awaitForEach();
-
-}, [fav_coin])
-
-  return (
-    <div>
-      <h1>Your favorite coins</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Coin Name</th>
-            <th>Current Price</th>
-          </tr>
-        </thead>
-        <tbody>
-         {result.map((coin,i) => 
-            <tr key={i}>
-              <td>
-                <img
-                    src={coin.image.large} 
-                    style={{width: 25, height: 25, marginRight: 10}} 
-                  />
-                  {coin.name}
-              </td>
-              <td>{coin.market_data.current_price.usd}</td>
-            </tr>
-         )}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
 
 
 function UserFavCoinContainer() {
@@ -87,10 +38,49 @@ function UserFavCoinContainer() {
       });
   }, []);
 
+  const handleRemove = (coin) => {
+    const delFavCoin = userFavCoins.filter((favCoin) => favCoin.coinId !== coin.coinId);
+    setUserFavCoin(delFavCoin);
+
+    fetch('/remove-fav_coin', {
+      method: "POST",
+      body: JSON.stringify(coin),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result.success)
+    });
+  }
+
   return (
     <div>
-      {/* {userFavCoins.length > 0 &&  */}
-      <UserFavCoin fav_coin={userFavCoins}/>
+      <h1>Your favorite coins</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Coin Name</th>
+            <th>Current Price</th>
+          </tr>
+        </thead>
+        <tbody>
+         {userFavCoins.map((coin) => 
+            <tr key={coin.coinId}>
+              <td>
+                <img
+                    src={coin.img} 
+                    style={{width: 25, height: 25, marginRight: 10}} 
+                  />
+                  {coin.coinName}
+              </td>
+              <td>{coin.curPrice}</td>
+              <td><button onClick={() => handleRemove(coin)}>Remove</button></td>
+            </tr>
+         )}
+        </tbody>
+      </table>
     </div>
   )
 }

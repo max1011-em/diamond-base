@@ -212,7 +212,7 @@ def get_transaction_json():
 
 @app.route("/remove-transaction", methods=['POST'])
 def remove_transaction():
-  """remove user selected transaction"""
+  """remove selected transaction"""
 
   user_coin_id = request.json.get("userCoinId")
   UserCoin.query.filter_by(user_coin_id=user_coin_id).delete()
@@ -228,16 +228,24 @@ def get_favorite_coin_json():
 
   user_email = session["logged_in_user_email"]
   user = crud.get_user_by_email(user_email)
-  user_fav_coins = crud.get_user_fav_coin_by_user_id(user.user_id)
+  user_fav_coins = db.session.query(UserCoin.coin_id).filter(UserCoin.user_id == user.user_id, UserCoin.favorite_coin == True).group_by(UserCoin.coin_id).all()
 
   USER_FAVORITE_COIN = []
 
   for user_coin in user_fav_coins:
     coin = crud.get_coin_by_coin_id(user_coin.coin_id)
+    url = f"https://api.coingecko.com/api/v3/coins/{coin.coin_id_name}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false"
+    response = requests.get(url)
+    data = response.json()
+
     user_favorite_coin = {
         "coinName": coin.coin_name,
-        "coinIdName": coin.coin_id_name
+        "coinIdName": coin.coin_id_name,
+        "img": data["image"]["large"],
+        "curPrice": data["market_data"]["current_price"]["usd"],
+        "coinId": coin.coin_id
     }
+
     USER_FAVORITE_COIN.append(user_favorite_coin)
 
   return jsonify({"fav_coin": USER_FAVORITE_COIN})
@@ -252,14 +260,14 @@ def add_favorite_coin():
 
   coin = crud.get_coin_by_coin_name(coin_name)
   user = crud.get_user_by_email(user_email)
-  user_coins = crud.get_user_coin_by_user_id(user.user_id)
+      
+  user_coins = UserCoin.query.filter(User.user_id == user.user_id,UserCoin.coin_id == coin.coin_id).all()
 
-  for user_coin in user_coins:
-    if user_coin.coin_id == coin.coin_id:
+  if user_coins:
+    for user_coin in user_coins:
       user_coin.favorite_coin = True
-
       db.session.commit()
-      return jsonify({"success": True})
+    return jsonify({"success": True})  
 
   user_coin = crud.create_user_coin(coin,
                                     user, 
@@ -269,9 +277,25 @@ def add_favorite_coin():
                                     0,
                                     None
                                     )
-
   user_coin.favorite_coin = True
   db.session.commit()
+  return jsonify({"success": True})
+
+
+@app.route("/remove-fav_coin", methods=['POST'])
+def remove_fav_coin():
+  """remove user favorite coin"""
+
+  coin_id = request.json.get("coinId")
+  user_email = session["logged_in_user_email"]
+  user = crud.get_user_by_email(user_email)
+
+  user_fav_coins = UserCoin.query.filter(UserCoin.user_id == user.user_id, UserCoin.coin_id == coin_id).all()
+  print("\n\n\n", coin_id, user_fav_coins,"\n\n\n")
+  for user_coin in user_fav_coins:
+    user_coin.favorite_coin = False
+    db.session.commit()
+  
   return jsonify({"success": True})
 
 
