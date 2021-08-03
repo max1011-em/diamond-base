@@ -203,10 +203,23 @@ def get_transaction_json():
       "price": coin.init_price,
       "qty": coin.qty,
       "date": coin.purchased_date,
-      "cost": abs(coin.total)
+      "cost": abs(coin.total),
+      "userCoinId": coin.user_coin_id
     })
 
   return jsonify({"transaction": transaction})
+
+
+@app.route("/remove-transaction", methods=['POST'])
+def remove_transaction():
+  """remove user selected transaction"""
+
+  user_coin_id = request.json.get("userCoinId")
+  UserCoin.query.filter_by(user_coin_id=user_coin_id).delete()
+  
+  db.session.commit()
+  
+  return jsonify({"success": True})
 
 
 @app.route("/favorite-coin.json")
@@ -269,7 +282,6 @@ def get_coin_news():
   news = get_coin_news_articles(coin_name)
 
   return jsonify({"articles": news})
-
 
 
 @app.route("/article.json")

@@ -1,22 +1,3 @@
-// function getUrl(day, coinId) {
-
-//   if(day === '24') {
-//     return `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=1&interval=minutely`
-//   } 
-//     else if(day === '7') {
-//     return `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7&interval=hourly`
-//   }
-//     else if(day === '30') {
-//     return `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=30&interval=hourly`
-//   } 
-//     else if(day === '90') {
-//     return `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=90&interval=daily`
-//   } 
-//     else if(day === '1') {
-//     return `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=365&interval=hourly`
-//   }
-// }
-
 
 function getLabel(day,data) {
   let label = []

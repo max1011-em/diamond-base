@@ -52,6 +52,7 @@ def get_coin_by_coin_id(coin_id):
   
   return Coin.query.filter(Coin.coin_id == coin_id).first()
 
+
 def get_coin_by_coin_sym(coin_sym):
   
   return Coin.query.filter(Coin.coin_symbol == coin_sym).first()
@@ -90,6 +91,23 @@ def get_article():
     
   return Article.query.all()
 
+
+if __name__ == "__main__":
+  from server import app
+
+  connect_to_db(app)
+
+
+
+# def get_users():
+    
+#   return User.query.all()
+
+
+# def get_user_by_id(user_id):
+
+#   return User.query.get(user_id)
+
 # def create_coin_news(coin, url, published_date, title, description):
     
 #   coin_news = CoinNews(
@@ -116,20 +134,3 @@ def get_article():
 #       return None
 #     else:
 #       return coin_news
-
-
-if __name__ == "__main__":
-  from server import app
-
-  connect_to_db(app)
-
-
-
-# def get_users():
-    
-#   return User.query.all()
-
-
-# def get_user_by_id(user_id):
-
-#   return User.query.get(user_id)

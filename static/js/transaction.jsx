@@ -1,7 +1,7 @@
 const { useHistory } = ReactRouterDOM;
 const { useState, useEffect } = React;
 
-function Transaction({holdings, getTransaction}) {
+function Transaction({holdings, getTransaction,getCoinName}) {
   const history = useHistory();
   const [transaction, setTransaction] = useState([]);
   const total = holdings.reduce((acc, cur) => {
@@ -15,6 +15,7 @@ function Transaction({holdings, getTransaction}) {
       .then(transaction => {
         setTransaction(transaction.transaction);
         getTransaction(transaction.transaction);
+        getCoinName(coin.coinName)
         history.push({pathname:`/transaction/${coinSymbol}`, state:{transaction}})
       });
   }
@@ -60,11 +61,33 @@ function Transaction({holdings, getTransaction}) {
 }
 
 
-function TransactionHistory({transHistory}) {
-  console.log(transHistory)
+function TransactionHistory({history,transCoinName}) {
+  const [transHistory, setTransHistory] = useState([]);
+
+  useEffect(() => {
+    setTransHistory(history);
+  },[]);
+
+  const handleRemove = (coin) => {
+    let delTransaction = transHistory.filter((trans) => trans.userCoinId !== coin.userCoinId);
+    setTransHistory(delTransaction);
+
+    fetch('/remove-transaction', {
+      method: "POST",
+      body: JSON.stringify(coin),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result.success)
+    });
+  }
+
   return (
     <div>
-    <h3>Your {transHistory[0].coinName} transaction history</h3> 
+    <h3>Your {transCoinName} transaction history</h3> 
     <table>
       <thead>
         <tr>
@@ -76,15 +99,14 @@ function TransactionHistory({transHistory}) {
         </tr>
       </thead>
       <tbody>
-        {transHistory.map((coin,i) => (
-          <tr key={i}>
+        {transHistory.map((coin) => (
+          <tr key={coin.userCoinId}>
             <td>{coin.type}</td>
             <td>${coin.price}</td>
             <td>{coin.qty}</td>
             <td>{coin.date}</td>
             <td>${coin.cost}</td>
-            <td><button>Edit</button></td>
-            <td><button>Delete</button></td>
+            <td><button onClick={() => handleRemove(coin)}>Delete</button></td>
           </tr>
         ))}
       </tbody>
@@ -93,14 +115,15 @@ function TransactionHistory({transHistory}) {
   );
 }
 
-function TransactionContainer({getTransHistory}) {
+function TransactionContainer({getTransHistory,getTransCoinName}) {
   const [uniqCoin, setUniqCoin] = useState([]);
 
   const getTransaction = (history) => {
-    console.log(history)
     getTransHistory(history);
   }
-
+  const getCoinName = (name) => {
+    getTransCoinName(name);
+  }
   useEffect(() => {
     fetch("/investments.json")
     .then((res) => res.json())
@@ -111,7 +134,9 @@ function TransactionContainer({getTransHistory}) {
   
   return (
     <div>
-      <Transaction holdings={uniqCoin} getTransaction={getTransaction}/>
+      <Transaction holdings={uniqCoin} 
+                    getTransaction={getTransaction}
+                    getCoinName={getCoinName}/>
     </div>
   )
 }
