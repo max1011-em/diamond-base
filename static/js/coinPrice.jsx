@@ -27,13 +27,25 @@ function CoinPrice({getCoinInfo,getCoinName}) {
       });
   }
 
+  const formatPercent = number => 
+    `${new Number(number).toFixed(2)}%`
   let { path } = useRouteMatch();
+
+  const formatDollar = (number, maximumSignificantDigits) =>
+    new Intl.NumberFormat(
+      'en-US', 
+      { 
+        style: 'currency', 
+        currency: 'USD',
+        maximumSignificantDigits
+      })
+      .format(number);
 
   return (
     <div>
       <h1>Get cryptocurrency prices</h1>
 
-      <table >
+      <table className='table'>
         <thead>
           <tr>
             <th>#</th>
@@ -56,17 +68,17 @@ function CoinPrice({getCoinInfo,getCoinName}) {
                 {coin.name}
               </td>
               <td>{coin.symbol.toUpperCase()}</td>
-              <td>{coin.current_price}</td>
+              <td>{formatDollar(coin.current_price, 20)}</td>
               <td> 
                 <span
                   className={coin.price_change_percentage_24h > 0 ? (
                     'text-success' 
                   ) : 'text-danger'}
                 >
-                {coin.price_change_percentage_24h}
+                {formatPercent(coin.price_change_percentage_24h)}
                 </span>
               </td>
-              <td>{coin.market_cap}</td>
+              <td>{formatDollar(coin.market_cap, 12)}</td>     
             </tr>
           ))}
         </tbody>

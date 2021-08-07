@@ -57,9 +57,9 @@ function App() {
         <Homepage getPaperHand={getPaperHand}/>
     </Route>
 
-    {isPaperHand ==="Yes" ? 
+    {isPaperHand ==="I'm Paper Hand" ? 
     <Redirect to="/block"/>
-    : (isPaperHand === "No"?
+    : (isPaperHand === "I'm Diamond Hand"?
     <Redirect to="/login"/> : null)
     }
 

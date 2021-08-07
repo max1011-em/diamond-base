@@ -1,0 +1,87 @@
+.background-video {
+    position: relative;
+  }
+  
+.background-video video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.homepage > section.container-fluid,
+.homepage > section.container {
+  width: 100vw;
+  height: 100vh;
+  padding-top: 56px;
+}
+
+.demo-1 {
+  background: no-repeat center/cover url('../img/crypto.jpg');
+}
+
+.homepage-button-diamond {
+  width: 250px;
+  height: 50px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  margin-right:15px;
+}
+
+.homepage-button-paper {
+  width: 250px;
+  height: 50px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  margin-left:15px;
+}
+
+.homepage-button-diamond:hover {
+  background-color: #2EE59D;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.homepage-button-paper:hover {
+  background-color: #f32132;
+  box-shadow: 0px 15px 20px rgba(229, 104, 46, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.homepage-text {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: calc(1.625rem + 4.5vw);
+  font-weight: 50;
+  line-height: 1.5;
+  color: white;
+}
+
+.idiamond-icon {
+  background-image : url(../img/diamond.png);
+  background-size: cover;
+  display: inline-block;
+  height: 5px;
+  width: 5px;
+  }

@@ -13,11 +13,24 @@ function Homepage({getPaperHand}) {
   };
 
   return (
-    <div>
-      <h1>Are you paper hands?</h1>
-      <button onClick={handleClick}>Yes</button>
-      <button onClick={handleClick}>No</button>
+    <div className="homepage">
+      {/* <div className="background-video">
+        <video autoPlay muted loop>
+          <source src="../static/img/Unicorn-Around.webm" type="video/webm" />
+        </video>
+      </div> */}
+      <section className="demo-1 container-fluid d-flex justify-content-center align-items-center">
+        <div className="row">
+          <div className="column">
+            <h1 className="homepage-text">Are you DIAMOND HANDS? or </h1>
+            <h1 className="homepage-text">PAPER HANDS?</h1>              
+            <button className="homepage-button-diamond" onClick={handleClick}>I'm Diamond Hand</button>
+            <button className="homepage-button-paper" onClick={handleClick}>I'm Paper Hand</button>
+          </div>
+        </div>
+      </section>
     </div>
+
   );
 }
 

@@ -7,31 +7,31 @@ function UserInvestmentList({holdings}) {
 
   return (
     <div>
-    <h1>Your coin list</h1> 
-    <h3>Total: ${total}</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Coin Name</th>
-          <th>Quantity</th>
-          <th>Equity</th>
-        </tr>
-      </thead>
-      <tbody>
-        {holdings.map((coin,i) => (
-          <tr key={i}>
-            <td>
-            <img
-              src={coin.img} 
-              style={{width: 25, height: 25, marginRight: 10}} 
-            />
-              {coin.coinName}</td>
-            <td>{coin.qty}</td>
-            <td>${coin.equity}</td>
+      <h1>Your coin list</h1> 
+      <h3>Total: ${total}</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Coin Name</th>
+            <th>Quantity</th>
+            <th>Equity</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {holdings.map((coin,i) => (
+            <tr key={i}>
+              <td>
+              <img
+                src={coin.img} 
+                style={{width: 25, height: 25, marginRight: 10}} 
+              />
+                {coin.coinName}</td>
+              <td>{coin.qty}</td>
+              <td>${coin.equity}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -212,7 +212,7 @@ function BuyForm({ handleHistoryUpdate }) {
           id="qty"
           />
       </div>
-      <button>submit</button>
+      <button>submit</button>   
     </form>
   );
 }

@@ -118,7 +118,6 @@ def get_coins_json():
 def add_user_investment():
   """add user investment"""
 
-  user_email = session["logged_in_user_email"]
   coin_name = request.json.get("coin_name")
   coin_id_name = request.json.get("coin_id_name")
   date = request.json.get("date")
@@ -127,7 +126,7 @@ def add_user_investment():
   total = price * qty
   transaction = request.json.get("transaction")
 
-  user = crud.get_user_by_email(user_email)
+  user = crud.get_user_by_email(session["logged_in_user_email"])
   coin = crud.get_coin_by_coin_name(coin_name)
 
   if transaction == "Sell" :
@@ -151,8 +150,7 @@ def add_user_investment():
 def get_investments_json():
   """Return a JSON response with all investments."""
 
-  user_email = session["logged_in_user_email"]
-  user = crud.get_user_by_email(user_email)
+  user = crud.get_user_by_email(session["logged_in_user_email"])
   user_coins = crud.get_user_coin_by_user_id(user.user_id)
 
   holdings = []
@@ -188,8 +186,7 @@ def get_transaction_json():
   """Return a JSON response with all transactions by coin name."""
   coin_sym = request.args.get("sym")
 
-  user_email = session["logged_in_user_email"]
-  user = crud.get_user_by_email(user_email)
+  user = crud.get_user_by_email(session["logged_in_user_email"])
   uniq_coin = crud.get_coin_by_coin_sym(coin_sym)
 
   query_uniq_coin = db.session.query(UserCoin).filter(UserCoin.user_id == user.user_id, UserCoin.qty != 0, UserCoin.coin_id == uniq_coin.coin_id).order_by(UserCoin.purchased_date.desc()).all()
@@ -226,8 +223,7 @@ def remove_transaction():
 def get_favorite_coin_json():
   """Return a JSON response with all user favorite coins."""
 
-  user_email = session["logged_in_user_email"]
-  user = crud.get_user_by_email(user_email)
+  user = crud.get_user_by_email(session["logged_in_user_email"])
   user_fav_coins = db.session.query(UserCoin.coin_id).filter(UserCoin.user_id == user.user_id, UserCoin.favorite_coin == True).group_by(UserCoin.coin_id).all()
 
   USER_FAVORITE_COIN = []
@@ -256,10 +252,8 @@ def add_favorite_coin():
   """add user favorite coin."""
 
   coin_name = request.json.get("coinName")
-  user_email = session["logged_in_user_email"]
-
   coin = crud.get_coin_by_coin_name(coin_name)
-  user = crud.get_user_by_email(user_email)
+  user = crud.get_user_by_email(session["logged_in_user_email"])
       
   user_coins = UserCoin.query.filter(User.user_id == user.user_id,UserCoin.coin_id == coin.coin_id).all()
 
@@ -287,11 +281,10 @@ def remove_fav_coin():
   """remove user favorite coin"""
 
   coin_id = request.json.get("coinId")
-  user_email = session["logged_in_user_email"]
-  user = crud.get_user_by_email(user_email)
+  user = crud.get_user_by_email(session["logged_in_user_email"])
 
-  user_fav_coins = UserCoin.query.filter(UserCoin.user_id == user.user_id, UserCoin.coin_id == coin_id).all()
-  print("\n\n\n", coin_id, user_fav_coins,"\n\n\n")
+  user_fav_coins = crud.get_user_fav_coin(user.user_id,coin_id)
+
   for user_coin in user_fav_coins:
     user_coin.favorite_coin = False
     db.session.commit()

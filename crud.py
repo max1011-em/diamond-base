@@ -81,10 +81,10 @@ def get_user_coin_by_user_id(user_id):
   return UserCoin.query.filter(UserCoin.user_id == user_id).all()
 
 
-def get_user_fav_coin_by_user_id(user_id):
+def get_user_fav_coin(user_id,coin_id):
 
   return UserCoin.query.filter(UserCoin.user_id == user_id, 
-                               UserCoin.favorite_coin == True ).all()
+                              UserCoin.coin_id == coin_id).all()
 
 
 def get_article():
