@@ -95,3 +95,23 @@
   align-items: center;
   height: 200px;
 }
+
+.block {
+  background-color: #ffeccd; /* fallback if background image fails */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.paper-text {
+  color: #d50100;
+}
+
+.diamond-text {
+  color:rgba(46, 229, 156, 0.792)
+}

@@ -72,7 +72,7 @@ function LoginContainer({getLogin}) {
       <div className="text-center">
           <LoginForm setAppLoginStatus={setAppLoginStatus} />
           <Link to="/signup">Sign up</Link>
-          {loginStatus || <h1>You are not here, Please signup!</h1>}
+          {loginStatus || <h3>You are not here, Please signup!</h3>}
       </div>
     </div>
   )

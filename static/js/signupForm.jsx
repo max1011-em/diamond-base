@@ -32,36 +32,36 @@ function SignupForm({getSignup}) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <h1>Create account</h1>
-                <label>Email</label>
-                <input 
-                    type="text"
-                    name="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                />
-            </div>
-            <div>
-                <label>Full name</label>
-                <input 
-                    type="text"
-                    name="name"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                />
-            </div>
-            <div>
-                <label>Create password</label>
-                <input 
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                />
-            </div>
-            <button>Create Account</button>
+        <form className="form-signin" onSubmit={handleSubmit}>
+          <div className="text-center">
+          <img className="mb-4" src="../static/img/diamond.png" alt="" width="80" height="80"/> 
+          </div> 
+          <h1 className="h1 mb-3 fw-normal text-center">Create account</h1>
+          <label>Email</label>
+          <input 
+              type="text"
+              className="form-control" 
+              name="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+          />  
+          <label>Full name</label>
+          <input 
+              type="text"
+              className="form-control" 
+              name="name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+          /> 
+          <label>Create password</label>
+          <input 
+              type="password"
+              className="form-control" 
+              name="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+          />           
+          <button className="btn btn-lg btn-block col-12 login-button">Create Account</button>
         </form>
     )
 }
@@ -80,7 +80,8 @@ function SignupContainer() {
 
     }
     return (
-        <div>
+        <div className="login container-fluid d-flex justify-content-center align-items-center">
+          <div className="text-center">
             <SignupForm getSignup={getSignup} />
             {signUp? (
             <div>
@@ -88,6 +89,7 @@ function SignupContainer() {
                 <Link to="/login">Log in</Link>
             </div>)
              : <h1>{message}</h1>}
+          </div>
         </div>
     )
 }
