@@ -5,28 +5,47 @@ function CoinInfo({coinInfo}) {
   const coinName = coinInfo.name;
   const image = coinInfo.image.small;
   const currentPrice = coinInfo.market_data.current_price.usd;
-  const marketCap = coinInfo.market_data.market_cap.usd;
   const marketCapRank = coinInfo.market_data.market_cap_rank;
-  const totalVolume = coinInfo.market_data.total_volume.usd;
-  const ath = coinInfo.market_data.ath.usd;
-  const athDate = coinInfo.market_data.ath_date.usd;
-  const atl = coinInfo.market_data.atl.usd;
-  const atlDate = coinInfo.market_data.atl_date.usd;
+  const perc24h = coinInfo.market_data.price_change_percentage_24h;
+
+  const formatPercent = number => 
+    `${new Number(number).toFixed(2)}%`
+  let { path } = useRouteMatch();
+
+  const formatDollar = (number, maximumSignificantDigits) =>
+    new Intl.NumberFormat(
+      'en-US', 
+      { 
+        style: 'currency', 
+        currency: 'USD',
+        maximumSignificantDigits
+      })
+      .format(number);
     
   return (
-    <div>
-      <h1>{coinName}</h1>
-      <img src={image} alt="coin"/>
-      <h2>current price: ${currentPrice}</h2> 
-      <h2>market cap: ${marketCap}</h2>
-      <h2>market cap rank: {marketCapRank}</h2>
-      <h2>total volume: ${totalVolume}</h2>
-      
-      <h3>All-Time-high: ${ath} {athDate}</h3> 
-      <h3>All-Time-low: ${atl} {atlDate}</h3>
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
+          <img src={image} alt="coin"/>
+          <h1>{coinName}</h1>
+        </div>
+      </div> 
 
-      <h2>About {coinName}</h2>
-      <div dangerouslySetInnerHTML={{__html: coinInfo.description.en}} />      
+      <div className="row">
+        <div className="col-12">
+          <h2>{formatDollar(currentPrice,20)}</h2> 
+            <span
+              className={perc24h > 0 ? (
+                'text-success' 
+                ) : 'text-danger'}
+                >
+                {formatPercent(perc24h)}
+            </span>
+          <h2>Rank #{marketCapRank}</h2>
+          <h2>About {coinName}</h2>
+          <div dangerouslySetInnerHTML={{__html: coinInfo.description.en}} />      
+        </div>
+      </div>
     </div>
   )
 }
@@ -131,21 +150,27 @@ function CoinSearchForm(props) {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-          <h1>search coin</h1>
+      <form className="d-flex search-input" onSubmit={handleSubmit}>
+        <div className="input-group">
+          <span className="input-group-text" id="basic-addon1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+          </span>
           <input
             id="auto"
-            type="text"
+            className="form-control me-1"
+            type="search"
             onChange={onChange}
             onKeyDown={onKeyDown}
             name="coinName"
-            placeholder="Type to search" 
+            placeholder="Search all cryptocurrencies" 
             value={input}
           />
           {renderAutocomplete()}
-        <button>Search</button>
+          
+        </div>
+          <button className="btn btn-warning coin-search" type="submit">Search</button>
       </form>
-    </div>
   );
 };

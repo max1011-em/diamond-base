@@ -1,0 +1,40 @@
+
+         
+.custom-navbar  {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: #5948d5;
+}
+
+.custom-navbar  .navbar-brand,
+.custom-navbar  .nav-link {
+    color: white;
+}
+
+.coin-search {
+    background-color:#5948d5;
+    color: white;
+    border-color: white;
+    /* outline-color: white; */
+}
+
+.coin-search:hover {
+  background-color: #4d3eb7;
+  border-color: white;
+  color: #fff;
+}
+
+.logout {
+  background-color: #fbcc20;
+}
+
+.logout:hover {
+background-color: #ffc802;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 500px;
+  /* padding: 15px; */
+  margin: 0 auto;
+}

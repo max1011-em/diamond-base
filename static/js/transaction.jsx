@@ -19,43 +19,60 @@ function Transaction({holdings, getTransaction,getCoinName}) {
         history.push({pathname:`/transaction/${coinSymbol}`, state:{transaction}})
       });
   }
+  const formatDollar = (number, maximumSignificantDigits) =>
+    new Intl.NumberFormat(
+      'en-US', 
+      { 
+        style: 'currency', 
+        currency: 'USD',
+        maximumSignificantDigits
+      })
+      .format(number);
 
   return (
-    <div>
-    <h3>Your Crytocurrency List</h3> 
-    <h3>Total: ${total}</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Coin Name</th>
-          <th>Symbol</th>
-          <th>Quantity</th>
-          <th>Current Price</th>
-          <th>Average Cost</th>
-          <th>Total Return</th>
-          <th>Equity</th>
-        </tr>
-      </thead>
-      <tbody>
-        {holdings.map((coin,i) => (
-          <tr key={i} onClick={() => handleClick(coin)}>
-            <td>
-            <img
-              src={coin.img} 
-              style={{width: 25, height: 25, marginRight: 10}} 
-            />
-              {coin.coinName}</td>
-            <td>{coin.sym}</td>
-            <td>{coin.qty}</td>
-            <td>${coin.curPrice}</td>
-            <td>${coin.avePrice}</td>
-            <td>${coin.totalReturn}</td>
-            <td>${coin.equity}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-    <TransactionGraph holding={holdings}/>
+    <div className="container">
+      <div className="row">
+        <div className="col-8">
+          <h5>Total Portfolio Value</h5>
+          <h1>{formatDollar(total, 12)}</h1>
+          <h4>Your Crytocurrency</h4> 
+          <table className="table table-hover trans-table-size">
+            <thead className="trans-table">
+              <tr>
+                <th>Coin Name</th>
+                <th>Symbol</th>
+                <th>Quantity</th>
+                <th>Current Price</th>
+                <th>Average Cost</th>
+                <th>Total Return</th>
+                <th>Equity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {holdings.map((coin,i) => (
+                <tr key={i} onClick={() => handleClick(coin)} className="trans-hover">
+                  <td>
+                  <img
+                    src={coin.img} 
+                    style={{width: 25, height: 25, marginRight: 10}} 
+                  />
+                    {coin.coinName}</td>
+                  <td>{coin.sym}</td>
+                  <td>{coin.qty}</td>
+                  <td>{formatDollar(coin.curPrice, 12)}</td>
+                  <td>{formatDollar(coin.avePrice, 12)}</td>
+                  <td>{formatDollar(coin.totalReturn, 12)}</td>
+                  <td>${coin.equity}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="col-4">
+          <TransactionGraph holding={holdings}/>
+        </div>       
+      </div>  
     </div>
   );
 }
@@ -86,31 +103,36 @@ function TransactionHistory({history,transCoinName}) {
   }
 
   return (
-    <div>
-    <h3>Your {transCoinName} transaction history</h3> 
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Date</th>
-          <th>Cost</th>
-        </tr>
-      </thead>
-      <tbody>
-        {transHistory.map((coin) => (
-          <tr key={coin.userCoinId}>
-            <td>{coin.type}</td>
-            <td>${coin.price}</td>
-            <td>{coin.qty}</td>
-            <td>{coin.date}</td>
-            <td>${coin.cost}</td>
-            <td><button onClick={() => handleRemove(coin)}>Remove</button></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
+          <h3>Your {transCoinName} transaction history</h3> 
+          <table className="table trans-table-size">
+            <thead className="trans-table">
+              <tr>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Date</th>
+                <th>Cost</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transHistory.map((coin) => (
+                <tr key={coin.userCoinId}>
+                  <td>{coin.type}</td>
+                  <td>${coin.price}</td>
+                  <td>{coin.qty}</td>
+                  <td>{coin.date}</td>
+                  <td>${coin.cost}</td>
+                  <td><button className="btn btn-warning remove-button" onClick={() => handleRemove(coin)}>Remove</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }

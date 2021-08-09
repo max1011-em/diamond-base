@@ -1,0 +1,21 @@
+.card-body {
+  background-color: #5948d5;
+}
+
+.card-footer {
+  background-color: #5948d5;
+}
+
+.news-btn {
+  background-color: #fbcc20;
+  color: black;
+}
+
+.news-btn:hover {
+  background-color: #ffc802;
+  color: black;
+}
+
+.sub-body {
+  background-color: #efedfb;
+}

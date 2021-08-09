@@ -53,7 +53,6 @@
   transition: all 0.3s ease 0s;
   cursor: pointer;
   outline: none;
-  margin-left:15px;
 }
 
 .homepage-button-diamond:hover {
@@ -85,3 +84,14 @@
   height: 5px;
   width: 5px;
   }
+
+.homepage-text {
+  text-align: center;
+}
+
+.homepage-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}

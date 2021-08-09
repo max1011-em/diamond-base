@@ -1,0 +1,51 @@
+/* transaction table */
+.trans-hover {
+  cursor: pointer;
+}
+  
+.trans-table {
+  background-color: #efedfb;
+  color: #5948d5;
+}
+
+.trans-table-size {
+  line-height: 50px;
+  min-height: 50px;
+  height: 50px;
+}
+
+.remove-button {
+  background-color: #fbcc20;
+}
+
+/*coin price table*/
+.price-table-size {
+  line-height: 50px;
+  min-height: 50px;
+  height: 50px;
+}
+
+.price-table {
+  background-color: #efedfb;
+  color: #5948d5;
+}
+
+.price-hover {
+  cursor: pointer;
+}
+  
+/*coin exchange table*/
+.exchange-table-size {
+  line-height: 50px;
+  min-height: 50px;
+  height: 50px;
+}
+
+.exchange-table {
+  background-color: #efedfb;
+  color: #5948d5;
+}
+
+.exchange-a {
+  background-color: #fbcc20;
+}

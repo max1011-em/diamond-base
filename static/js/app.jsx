@@ -48,11 +48,10 @@ function App() {
     return (  
    <BrowserRouter>
     {userLogin ? 
-        <Header getLogout={getLogout}
+        <Navbar getLogout={getLogout}
                 getCoinName={getCoinName}
                 getCoinInfo={getCoinInfo}/>
         : null}
-
     <Route exact path="/">
         <Homepage getPaperHand={getPaperHand}/>
     </Route>

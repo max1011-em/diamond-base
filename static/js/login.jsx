@@ -29,35 +29,32 @@ function LoginForm({setAppLoginStatus}) {
 
   return (
       <form className="form-signin" onSubmit={handleSubmit}>
-        <img class="mb-4" src="../static/img/diamond.png" alt="" width="80" height="80"/>
-        <div>
-          <h1 class="h1 mb-3 fw-normal">Welcome Diamond Hands</h1>
-          <label for="inputEmail" class="sr-only">Email address</label>
+        <img className="mb-4" src="../static/img/diamond.png" alt="" width="80" height="80"/>
+        
+          <h1 className="h1 mb-3 fw-normal">Welcome Diamond Hands</h1>
+          <label>Email address</label>
           <input 
             type="email" 
             id="inputEmail"
-            class="form-control" 
+            className="form-control" 
             placeholder="Email address" 
             name="username"
-            required autofocus
+            required autoFocus
             value={username}
             onChange={(e) => setUser(e.target.value)}
           />
-        </div>
-        <div>
-          <label for="inputPassword" class="sr-only">Password</label>
+          <label>Password</label>
           <input 
             type="password" 
             id="inputPassword" 
-            class="form-control" 
+            className="form-control" 
             placeholder="Password" 
             required
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </div>
-        <button class="btn btn-primary btn-lg btn-block">Sign in</button>
+        <button className="btn btn-lg btn-block col-12 login-button">Log in</button>
       </form>
   );
 }
@@ -72,7 +69,7 @@ function LoginContainer({getLogin}) {
 
   return (
     <div className="login container-fluid d-flex justify-content-center align-items-center">
-      <div class="text-center">
+      <div className="text-center">
           <LoginForm setAppLoginStatus={setAppLoginStatus} />
           <Link to="/signup">Sign up</Link>
           {loginStatus || <h1>You are not here, Please signup!</h1>}

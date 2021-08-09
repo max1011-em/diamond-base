@@ -19,10 +19,11 @@ function AddFavCoin({coinName}) {
   }
 
   return (
-    <div>
-      <button onClick={handleClick}>Add Favorite</button>
-    </div>  
-
+      <div className="row">
+        <div className="col-12">
+          <button className="btn btn-warning fav-btn" onClick={handleClick}>Add Favorite</button>
+        </div> 
+      </div> 
   )
 };
 

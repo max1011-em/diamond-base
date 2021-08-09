@@ -2,7 +2,7 @@ const { useState } = React;
 
 function CoinInfoRender({coinName, coinInfo}) {
   return (
-    <div>
+    <div className="container">
       <CoinGraph coinInfo={coinInfo}/>
       <AddFavCoin coinName={coinName}/>
       <CoinInfo coinInfo={coinInfo}/>

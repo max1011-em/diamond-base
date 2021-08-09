@@ -42,47 +42,50 @@ function CoinPrice({getCoinInfo,getCoinName}) {
       .format(number);
 
   return (
-    <div>
-      <h1>Get cryptocurrency prices</h1>
-
-      <table className='table'>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Cryptocurrency</th>
-            <th>Symbol</th>
-            <th>Price</th>
-            <th>24H Change</th>
-            <th>Market cap</th>
-          </tr>
-        </thead>
-        <tbody>
-          {coinPrice.map((coin,i) => (
-            <tr key={coin.id} data-id={coin.id} onClick={handleClick}>
-              <td>{i+1}</td>
-              <td id={coin.id} >
-                <img
-                  src={coin.image} 
-                  style={{width: 25, height: 25, marginRight: 10}} 
-                />
-                {coin.name}
-              </td>
-              <td>{coin.symbol.toUpperCase()}</td>
-              <td>{formatDollar(coin.current_price, 20)}</td>
-              <td> 
-                <span
-                  className={coin.price_change_percentage_24h > 0 ? (
-                    'text-success' 
-                  ) : 'text-danger'}
-                >
-                {formatPercent(coin.price_change_percentage_24h)}
-                </span>
-              </td>
-              <td>{formatDollar(coin.market_cap, 12)}</td>     
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
+          <h1>Cryptocurrency prices</h1>
+          <table className="table table-hover price-table-size">
+            <thead className="price-table">
+              <tr>
+                <th>#</th>
+                <th>Cryptocurrency</th>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>24H Change</th>
+                <th>Market cap</th>
+              </tr>
+            </thead>
+            <tbody>
+              {coinPrice.map((coin,i) => (
+                <tr key={coin.id} data-id={coin.id} onClick={handleClick} className="price-hover">
+                  <td>{i+1}</td>
+                  <td id={coin.id} >
+                    <img
+                      src={coin.image} 
+                      style={{width: 25, height: 25, marginRight: 10}} 
+                    />
+                    {coin.name}
+                  </td>
+                  <td>{coin.symbol.toUpperCase()}</td>
+                  <td>{formatDollar(coin.current_price, 20)}</td>
+                  <td> 
+                    <span
+                      className={coin.price_change_percentage_24h > 0 ? (
+                        'text-success' 
+                      ) : 'text-danger'}
+                    >
+                    {formatPercent(coin.price_change_percentage_24h)}
+                    </span>
+                  </td>
+                  <td>{formatDollar(coin.market_cap, 12)}</td>     
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>   
+      </div>    
     </div>
   )
 }

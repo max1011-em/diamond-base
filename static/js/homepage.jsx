@@ -20,12 +20,14 @@ function Homepage({getPaperHand}) {
         </video>
       </div> */}
       <section className="demo-1 container-fluid d-flex justify-content-center align-items-center">
-        <div className="row">
+        <div className="row justify-content-center">
           <div className="column">
             <h1 className="homepage-text">Are you DIAMOND HANDS? or </h1>
             <h1 className="homepage-text">PAPER HANDS?</h1>              
-            <button className="homepage-button-diamond" onClick={handleClick}>I'm Diamond Hand</button>
-            <button className="homepage-button-paper" onClick={handleClick}>I'm Paper Hand</button>
+            <div className="homepage-button">
+              <button className="homepage-button-diamond" onClick={handleClick}>I'm Diamond Hand</button>
+              <button className="homepage-button-paper" onClick={handleClick}>I'm Paper Hand</button>
+            </div>
           </div>
         </div>
       </section>

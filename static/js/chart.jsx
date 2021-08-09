@@ -1,7 +1,5 @@
 const { useState, useEffect, useRef } = React;
 
-
-
 function CoinGraph({coinInfo}) {
   const canvasRef = useRef();
   const [ historyMarket, setHistoryMarket ] = useState([]);
@@ -50,8 +48,9 @@ function CoinGraph({coinInfo}) {
               label: coinInfo.name,
               data: price,
               fill: false,
-              borderColor: 'rgb(255, 127, 80)',
-              tension: 0.1
+              borderColor: 'rgb(89, 72, 213)',
+              tension: 0.1,
+              borderWidth: 2
           }]
       },
       options: {
@@ -76,20 +75,28 @@ function CoinGraph({coinInfo}) {
   },[historyMarket])
  
   return (
-    <div id="coinContainer">
-      <button onClick={handleClick}>24h</button>
-      <button onClick={handleClick}>7d</button>
-      <button onClick={handleClick}>30d</button>
-      <button onClick={handleClick}>90d</button>
-      <button onClick={handleClick}>365d</button>
-      <canvas ref={canvasRef} id="myChart" width="500" height="500"></canvas>
+    <div className="chartLine">
+      <div className="row">
+        <div className="col-12">
+          <div className="btn-toolbar">
+            <span className="ms-auto">
+              <button className="btn btn-warning graph-btn" onClick={handleClick}>24h</button>
+              <button className="btn btn-warning graph-btn" onClick={handleClick}>7d</button>
+              <button className="btn btn-warning graph-btn" onClick={handleClick}>30d</button>
+              <button className="btn btn-warning graph-btn" onClick={handleClick}>90d</button>
+              <button className="btn btn-warning graph-btn" onClick={handleClick}>365d</button>
+            </span>
+          </div>
+          <h5>{day}d</h5>
+          <canvas ref={canvasRef} id="myChart"></canvas>
+        </div>
+      </div> 
     </div>
   )
 };
 
 
 function TransactionGraph({holding}) {
-  console.log(holding)
   const canvasRef = useRef();
   let label = holding.map(coin => coin.coinName);
 
@@ -101,7 +108,7 @@ function TransactionGraph({holding}) {
           datasets: [{
               data: holding.map(coin => coin.equity),
               fill: false,
-              backgroundColor: 'rgb(255, 127, 80)',
+              backgroundColor: 'rgb(253, 160, 48)',
               tension: 0.1
           }]
       },
@@ -121,8 +128,8 @@ function TransactionGraph({holding}) {
   },[holding])
   
   return (
-    <div id="coinContainer">
-      <canvas ref={canvasRef} id="myChart" width="500" height="500"></canvas>
+    <div className="chartPie">
+      <canvas ref={canvasRef} id="myChart"  width="500" height="500"></canvas>
     </div>
   )
 };
