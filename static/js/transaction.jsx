@@ -106,8 +106,8 @@ function TransactionHistory({history,transCoinName}) {
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <h3>Your {transCoinName} transaction history</h3> 
-          <table className="table trans-table-size">
+          <h3>Your <span className="text-color">{transCoinName}</span> transaction history</h3> 
+          <table className="table trans-table-size margin-2">
             <thead className="trans-table">
               <tr>
                 <th>Type</th>
