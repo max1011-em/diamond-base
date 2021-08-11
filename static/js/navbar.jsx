@@ -24,32 +24,39 @@ function Navbar(props) {
       <nav className="navbar navbar-expand-lg navbar-light custom-navbar ">
         <NavLink 
         to="/main"
+        id="nav-brand"
         activeClassName="navlink-active"
         className="navbar-brand">
         <img src="../static/img/diamond-white.png" alt="" width="50" height="50"/>
+        DiamondBase
         </NavLink>
         <NavLink 
         to="/main"
+        id="nav-link-color"
         activeClassName="navlink-active"
         className="nav-link">Main
         </NavLink>
         <NavLink 
         to="/prices"
+        id="nav-link-color"
         activeClassName="navlink-active"
         className="nav-link">Prices
         </NavLink>
         <NavLink 
         to="/exchange"
+        id="nav-link-color"
         activeClassName="navlink-active"
         className="nav-link">Exchange
         </NavLink>
         <NavLink 
         to="/news"
+        id="nav-link-color"
         activeClassName="navlink-active"
         className="nav-link">News
         </NavLink>
         <NavLink 
         to="/transaction"
+        id="nav-link-color"
         activeClassName="navlink-active"
         className="nav-link">Transaction
         </NavLink>

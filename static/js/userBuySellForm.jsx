@@ -17,9 +17,9 @@ function UserInvestmentList({holdings}) {
 
   return (
     <div>
-      <h5>Your total investment</h5> 
+      <h5>Total investment</h5> 
       <h1 className="text-color">Total: {formatDollar(total, 12)}</h1>
-      <h2 className="margin-2">Your coin list</h2> 
+      <h2 className="margin-2">Coin list</h2> 
       <table className="table table-hover trans-table-size">
         <thead className="trans-table">
           <tr>

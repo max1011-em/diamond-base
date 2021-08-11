@@ -59,7 +59,7 @@ function UserFavCoinContainer() {
   return (
     <div className="row">
       <div className="col-8">
-      <h2 className="margin-4">Your favorite coins</h2>
+      <h2 className="margin-4">Favorite coins</h2>
         <table className="table table-hover trans-table-size">
           <thead className="fav-table">
             <tr>

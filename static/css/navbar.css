@@ -23,6 +23,17 @@
   color: #fff;
 }
 
+#nav-brand {
+  color: white;
+}
+#nav-brand:hover {
+  color: #fbcc20;
+}
+
+#nav-link-color:hover {
+  color: #fbcc20;
+}
+
 .logout {
   background-color: #fbcc20;
 }

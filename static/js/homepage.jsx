@@ -5,24 +5,18 @@ function Homepage({getPaperHand}) {
 
   const handleClick = (e) => {
     e.preventDefault();
-
-    // let answer;
-    // e.target.innerText === 'Yes'? answer=true: answer=false;
     setUserAnswer(e.target.innerText);
     getPaperHand(e.target.innerText);
   };
 
   return (
     <div className="homepage">
-      {/* <div className="background-video">
-        <video autoPlay muted loop>
-          <source src="../static/img/Unicorn-Around.webm" type="video/webm" />
-        </video>
-      </div> */}
+
       <section className="demo-1 container-fluid d-flex justify-content-center align-items-center">
         <div className="row justify-content-center">
           <div className="column">
-            <h1 className="homepage-text">Are you DIAMOND HANDS? or </h1>
+            <h1 className="homepage-text">Are you DIAMOND HANDS?</h1>
+            <h1 className="homepage-text">or </h1>
             <h1 className="homepage-text">PAPER HANDS?</h1>              
             <div className="homepage-button">
               <button className="homepage-button-diamond" onClick={handleClick}>I'm Diamond Hand</button>
