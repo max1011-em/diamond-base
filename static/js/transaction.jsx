@@ -34,8 +34,8 @@ function Transaction({holdings, getTransaction,getCoinName}) {
       <div className="row">
         <div className="col-8">
           <h5>Total Portfolio Value</h5>
-          <h1>{formatDollar(total, 12)}</h1>
-          <h4>Your Crytocurrency</h4> 
+          <h1 className="text-color">{formatDollar(total, 12)}</h1>
+          <h4 className="margin-2">Your Crytocurrency</h4> 
           <table className="table table-hover trans-table-size">
             <thead className="trans-table">
               <tr>

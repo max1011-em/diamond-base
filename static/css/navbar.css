@@ -1,9 +1,8 @@
-
-         
 .custom-navbar  {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    background-color: #5948d5;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #5948d5;
+  margin-bottom: 2rem;
 }
 
 .custom-navbar  .navbar-brand,

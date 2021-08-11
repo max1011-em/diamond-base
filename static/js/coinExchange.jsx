@@ -10,7 +10,7 @@ function CoinExchange() {
   fetch(exchangeUrl)
     .then(response => response.json())
     .then(exchange => {
-      setExchange(exchange.slice(0,30));
+      setExchange(exchange.slice(0,50));
     });
   }, []);
 
@@ -54,7 +54,7 @@ function CoinExchange() {
                   <td>{exchange.year_established}</td>
                   <td>{exchange.country}</td>
                   <td>{formatDollar(exchange.trade_volume_24h_btc, 12)}</td> 
-                  <td><a class="btn btn-warning exchange-a" href={exchange.url} role="button" target={"_blank"}>Go!</a> </td> 
+                  <td><a className="btn btn-warning exchange-a" href={exchange.url} role="button" target={"_blank"}>Go!</a> </td> 
                    
                 </tr>
               ))}

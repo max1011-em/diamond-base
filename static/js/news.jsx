@@ -20,7 +20,7 @@ function News() {
       <div className="main-card">
         <a className="text-white" href={headline.url} target={"_blank"}>
           <div className="card mb-4 bg-primary">
-            <div className="card-body">
+            <div className="card-body headline">
               <h5 className="display-4 card-title">{headline.title}</h5>
               <p className="card-text">{headline.description}</p>
             </div>
@@ -31,7 +31,7 @@ function News() {
         </a>
       </div>
       
-      <h1>Coin News</h1>
+      <h1 className="margin-2">Coin News</h1>
       <div className="row">
       {news.map((article,i)  =>
         <div key={i} className="col-md-12">
@@ -42,7 +42,7 @@ function News() {
               {article.title}</a>
             </h3>
             <div className="mb-1 text-muted">{article.published}</div>
-            <p className="card-text mb-auto">{article.description}</p>
+            <p className="card-text mb-auto margin-2">{article.description}</p>
           </div>
           <img className="card-img-right flex-auto d-none d-md-block" src={article.image_url} alt="Card image cap" />
         </div>
@@ -67,12 +67,12 @@ function CoinNews({coinName}) {
     }, []);
   return (
     <div>
-      <h1>{coinName} News</h1>
+      <h1 className="margin-4">{coinName} News</h1>
       <div className="row">
         {news.map((article,i)  =>
           <div key={i} className="col-md-12">
             <div className="card flex-md-row mb-4 box-shadow h-md-250">
-              <div className="card-body d-flex flex-column align-items-start">
+              <div className="card-body d-flex flex-column align-items-start sub-body">
                 <h3 className="mb-0">
                 <a className="text-dark" href={article.url} target={"_blank"}>
                   {article.title}</a>

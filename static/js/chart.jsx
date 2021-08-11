@@ -6,6 +6,7 @@ function CoinGraph({coinInfo}) {
   const [url, setUrl] = useState("");
   const [day, setDay] = useState('24');
   const [myChart, setMyChart] =useState(null);
+  const defaultBtnClass = "btn btn-warning graph-btn" 
 
   useEffect(() => {
     setUrl(`https://api.coingecko.com/api/v3/coins/${coinInfo.id}/market_chart?vs_currency=usd&days=1&interval=minutely`)
@@ -80,14 +81,14 @@ function CoinGraph({coinInfo}) {
         <div className="col-12">
           <div className="btn-toolbar">
             <span className="ms-auto">
-              <button className="btn btn-warning graph-btn" onClick={handleClick}>24h</button>
+              <button className={day==="24"? defaultBtnClass + " active" : defaultBtnClass} onClick={handleClick}>24h
+              </button>
               <button className="btn btn-warning graph-btn" onClick={handleClick}>7d</button>
               <button className="btn btn-warning graph-btn" onClick={handleClick}>30d</button>
               <button className="btn btn-warning graph-btn" onClick={handleClick}>90d</button>
               <button className="btn btn-warning graph-btn" onClick={handleClick}>365d</button>
             </span>
           </div>
-          <h5>{day}d</h5>
           <canvas ref={canvasRef} id="myChart"></canvas>
         </div>
       </div> 

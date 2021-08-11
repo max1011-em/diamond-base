@@ -25,15 +25,15 @@ function CoinInfo({coinInfo}) {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-12">
-          <img src={image} alt="coin"/>
+        <div className="col-12 display-flex">
+          <img className="coin-img" src={image} alt="coin"/>
           <h1>{coinName}</h1>
         </div>
       </div> 
 
       <div className="row">
         <div className="col-12">
-          <h2>{formatDollar(currentPrice,20)}</h2> 
+          <h2 className="inline small-margin">{formatDollar(currentPrice,20)}</h2> 
             <span
               className={perc24h > 0 ? (
                 'text-success' 
@@ -42,7 +42,7 @@ function CoinInfo({coinInfo}) {
                 {formatPercent(perc24h)}
             </span>
           <h2>Rank #{marketCapRank}</h2>
-          <h2>About {coinName}</h2>
+          <h2 className="margin-2">About {coinName}</h2>
           <div dangerouslySetInnerHTML={{__html: coinInfo.description.en}} />      
         </div>
       </div>
@@ -113,14 +113,14 @@ function CoinSearchForm(props) {
       if (isShow && input) {
         if (filtered.length) {
           return (
-            <ul className="autocomplete">
+            <ul className="autocomplete dropdown-menu">
               {filtered.map((suggestion, index) => {
                 let className;
                 if (index === active) {
                   className = "active";
                 }
                 return (
-                  <li className={className} key={suggestion} onClick={onClick}>
+                  <li className={"dropdown-item" + " " + className} key={suggestion} onClick={onClick}>
                     {suggestion}
                   </li>
                 );

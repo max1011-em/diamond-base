@@ -19,7 +19,7 @@ function AddFavCoin({coinName}) {
   }
 
   return (
-      <div className="row">
+      <div className="row fav-coin-width">
         <div className="col-12">
           <button className="btn btn-warning fav-btn" onClick={handleClick}>Add Favorite</button>
         </div> 
@@ -57,31 +57,34 @@ function UserFavCoinContainer() {
   }
 
   return (
-    <div>
-      <h1>Your favorite coins</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Coin Name</th>
-            <th>Current Price</th>
-          </tr>
-        </thead>
-        <tbody>
-         {userFavCoins.map((coin) => 
-            <tr key={coin.coinId}>
-              <td>
-                <img
-                    src={coin.img} 
-                    style={{width: 25, height: 25, marginRight: 10}} 
-                  />
-                  {coin.coinName}
-              </td>
-              <td>{coin.curPrice}</td>
-              <td><button onClick={() => handleRemove(coin)}>Remove</button></td>
+    <div className="row">
+      <div className="col-8">
+      <h2 className="margin-4">Your favorite coins</h2>
+        <table className="table table-hover trans-table-size">
+          <thead className="fav-table">
+            <tr>
+              <th>Coin Name</th>
+              <th>Current Price</th>
+              <th>Action</th>
             </tr>
-         )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+          {userFavCoins.map((coin) => 
+              <tr key={coin.coinId}>
+                <td>
+                  <img
+                      src={coin.img} 
+                      style={{width: 25, height: 25, marginRight: 10}} 
+                    />
+                    {coin.coinName}
+                </td>
+                <td>{coin.curPrice}</td>
+                <td><button className="btn btn-warning remove-button" onClick={() => handleRemove(coin)}>Remove</button></td>
+              </tr>
+          )}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

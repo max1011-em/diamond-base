@@ -4,10 +4,8 @@ const { useState } = React;
 function MainContainer() {
 
   return (
-    <div>
-      <h1>Your investment</h1>
+    <div className="container">
       <UserInvestmentContainer />
-      <UserFavCoinContainer />
     </div>
   )
 }

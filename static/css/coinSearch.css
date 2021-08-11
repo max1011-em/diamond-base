@@ -15,18 +15,24 @@ input {
   max-height: 143px;
   overflow-y: auto;
   padding-left: 0;
-  width: calc(300px + 1rem);
+  width: 418px;
+  display: block;
+  margin-top: 40px;
   }
 .autocomplete li {
   padding: 8px;
   }
 .autocomplete > .active,
 .autocomplete li:hover {
-  background-color: darkgray;
+  background-color: #efedfb;
   cursor: pointer;
   font-weight: 700;
+  color: #5948d5;
   }
 .autocomplete li:not(:last-of-type) {
   border-bottom: 1px solid #999;
   }
  
+.auto-margin {
+  margin-top: 0px;
+}

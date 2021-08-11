@@ -5,12 +5,23 @@ function UserInvestmentList({holdings}) {
     return acc + cur.equity
   },0); 
 
+  const formatDollar = (number, maximumSignificantDigits) =>
+    new Intl.NumberFormat(
+      'en-US', 
+      { 
+        style: 'currency', 
+        currency: 'USD',
+        maximumSignificantDigits
+      })
+      .format(number);
+
   return (
     <div>
-      <h1>Your coin list</h1> 
-      <h3>Total: ${total}</h3>
-      <table>
-        <thead>
+      <h5>Your total investment</h5> 
+      <h1 className="text-color">Total: {formatDollar(total, 12)}</h1>
+      <h2 className="margin-2">Your coin list</h2> 
+      <table className="table table-hover trans-table-size">
+        <thead className="trans-table">
           <tr>
             <th>Coin Name</th>
             <th>Quantity</th>
@@ -27,11 +38,11 @@ function UserInvestmentList({holdings}) {
               />
                 {coin.coinName}</td>
               <td>{coin.qty}</td>
-              <td>${coin.equity}</td>
+              <td>{formatDollar(coin.equity, 12)}</td>
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
     </div>
   );
 }
@@ -94,7 +105,7 @@ function AutoCompUserInvestment({getCoinName,getCoinIdName}) {
     if (isShow && input) {
       if (filtered.length) {
         return (
-          <ul className="autocomplete">
+          <ul className="autocomplete auto-margin">
             {filtered.map((suggestion, index) => {
               let className;
               if (index === active) {
@@ -121,16 +132,16 @@ function AutoCompUserInvestment({getCoinName,getCoinIdName}) {
 
   return (
     <div>
-          <input
-            id="auto"
-            type="text"
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            name="coinName"
-            placeholder="Type to add your coins" 
-            value={input}
-          />
-          {renderAutocomplete()}
+      <input
+        id="auto"
+        className="form-control"
+        type="text"
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+        name="coinName"
+        value={input}
+      />
+      {renderAutocomplete()}
     </div>
   );
 }
@@ -178,41 +189,45 @@ function BuyForm({ handleHistoryUpdate }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Coin Name</label>
+      <div className="mb-3">
+        <label className="form-label text-color">Coin Name</label>
         <AutoCompUserInvestment getCoinName={getCoinName} getCoinIdName={getCoinIdName}/>
       </div>
-      <div>
-        <label>Purchased date</label>
+
+      <div className="mb-3">
+        <label className="form-date text-color">Purchased date</label>
         <input 
           type="date"
+          className="form-control"
           name="date"
           value={purchsedDate}
           onChange={(e) => setDate(e.target.value)}
           id="date"
           />
       </div>
-      <div>
-        <label>Initial Price $</label>
+      <div className="mb-3">
+        <label className="form-label text-color">Initial Price $</label>
         <input 
           type="text"
+          className="form-control"
           name="initprice"
           value={initPrice}
           onChange={(e) => setInitPrice(e.target.value)}
           id="initprice"
           />
       </div>
-      <div>
-        <label>Quantity</label>
+      <div className="mb-3">
+        <label className="form-label text-color">Quantity</label>
         <input 
           type="text"
+          className="form-control"
           name="qty"
           value={qty}
           onChange={(e) => setQty(e.target.value)}
           id="qty"
           />
       </div>
-      <button>submit</button>   
+      <button className="btn btn-warning submit-btn">submit</button>   
     </form>
   );
 }
@@ -260,41 +275,44 @@ function SellForm({ handleHistoryUpdate }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Coin Name</label>
+      <div className="mb-3">
+        <label className="form-label text-color">Coin Name</label>
         <AutoCompUserInvestment getCoinName={getCoinName} getCoinIdName={getCoinIdName}/>
       </div>
-      <div>
-        <label>Sell date</label>
+      <div className="mb-3">
+        <label className="form-date text-color">Sell date</label>
         <input 
           type="date"
+          className="form-control"
           name="date"
           value={sellDate}
           onChange={(e) => setSellDate(e.target.value)}
           id="date"
           />
       </div>
-      <div>
-        <label>Sell Price $</label>
+      <div className="mb-3">
+        <label className="form-label text-color">Sell Price $</label>
         <input 
           type="text"
+          className="form-control"
           name="sellPrice"
           value={sellPrice}
           onChange={(e) => setSellPrice(e.target.value)}
           id="sellPrice"
           />
       </div>
-      <div>
-        <label>Quantity</label>
+      <div className="mb-3">
+        <label className="form-label text-color">Quantity</label>
         <input 
           type="text"
+          className="form-control"
           name="qty"
           value={qty}
           onChange={(e) => setQty(e.target.value)}
           id="qty"
           />
       </div>
-      <button>submit</button>
+      <button className="btn btn-warning submit-btn">submit</button>
     </form>
   );
 }
@@ -324,12 +342,20 @@ function UserInvestmentContainer() {
   
   return (
     <div>
-      {/* <UserInvestmentGraph userInvestments={userInvestments}/> */}
-      <h1>Add Buy</h1>
-      <BuyForm handleHistoryUpdate={handleHistoryUpdate}/>
-      <h1>Add Sell</h1>
-      <SellForm handleHistoryUpdate={handleHistoryUpdate}/>
-      <UserInvestmentList holdings={uniqCoin}/>
+      <div className="row">
+        <div className="col-8">
+          <UserInvestmentList holdings={uniqCoin}/>
+          <UserFavCoinContainer />
+        </div>
+
+        <div className="col-4">
+          <h2>Add Buy</h2>
+          <BuyForm handleHistoryUpdate={handleHistoryUpdate}/>
+          <h2 className="margin-2">Add Sell</h2>
+          <SellForm handleHistoryUpdate={handleHistoryUpdate}/>
+        </div>
+      </div>  
+
     </div>
   )
 }
