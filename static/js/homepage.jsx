@@ -19,8 +19,8 @@ function Homepage({getPaperHand}) {
             <h1 className="homepage-text">or </h1>
             <h1 className="homepage-text">PAPER HANDS?</h1>              
             <div className="homepage-button">
-              <button className="homepage-button-diamond" onClick={handleClick}>I'm Diamond Hand</button>
-              <button className="homepage-button-paper" onClick={handleClick}>I'm Paper Hand</button>
+              <button className="homepage-button-diamond" onClick={handleClick}>I'm Diamond Hands</button>
+              <button className="homepage-button-paper" onClick={handleClick}>I'm Paper Hands</button>
             </div>
           </div>
         </div>

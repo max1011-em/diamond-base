@@ -1,6 +1,7 @@
 const { useState, useEffect } = React;
 
 function UserInvestmentList({holdings}) {
+  console.log(holdings)
   const total = holdings.reduce((acc, cur) => {
     return acc + cur.equity
   },0); 
@@ -140,6 +141,7 @@ function AutoCompUserInvestment({getCoinName,getCoinIdName}) {
         onKeyDown={onKeyDown}
         name="coinName"
         value={input}
+        autocomplete="off"
       />
       {renderAutocomplete()}
     </div>
@@ -203,6 +205,7 @@ function BuyForm({ handleHistoryUpdate }) {
           value={purchsedDate}
           onChange={(e) => setDate(e.target.value)}
           id="date"
+          autocomplete="off"
           />
       </div>
       <div className="mb-3">
@@ -214,6 +217,7 @@ function BuyForm({ handleHistoryUpdate }) {
           value={initPrice}
           onChange={(e) => setInitPrice(e.target.value)}
           id="initprice"
+          autocomplete="off"
           />
       </div>
       <div className="mb-3">
@@ -225,6 +229,7 @@ function BuyForm({ handleHistoryUpdate }) {
           value={qty}
           onChange={(e) => setQty(e.target.value)}
           id="qty"
+          autocomplete="off"
           />
       </div>
       <button className="btn btn-warning submit-btn">submit</button>   
@@ -299,6 +304,7 @@ function SellForm({ handleHistoryUpdate }) {
           value={sellPrice}
           onChange={(e) => setSellPrice(e.target.value)}
           id="sellPrice"
+          autocomplete="off"
           />
       </div>
       <div className="mb-3">
@@ -310,6 +316,7 @@ function SellForm({ handleHistoryUpdate }) {
           value={qty}
           onChange={(e) => setQty(e.target.value)}
           id="qty"
+          autocomplete="off"
           />
       </div>
       <button className="btn btn-warning submit-btn">submit</button>

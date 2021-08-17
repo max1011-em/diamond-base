@@ -166,6 +166,7 @@ function CoinSearchForm(props) {
             name="coinName"
             placeholder="Search all cryptocurrencies" 
             value={input}
+            autocomplete="off"
           />
           {renderAutocomplete()}
           

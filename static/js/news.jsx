@@ -62,7 +62,7 @@ function CoinNews({coinName}) {
     fetch(url)
       .then(response => response.json())
       .then(article => {
-        setNews(article.articles.slice(0,2))
+        setNews(article.articles)
       });
     }, []);
   return (

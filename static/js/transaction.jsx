@@ -61,7 +61,11 @@ function Transaction({holdings, getTransaction,getCoinName}) {
                   <td>{coin.qty}</td>
                   <td>{formatDollar(coin.curPrice, 12)}</td>
                   <td>{formatDollar(coin.avePrice, 12)}</td>
-                  <td>{formatDollar(coin.totalReturn, 12)}</td>
+                  <td><span
+                      className={coin.totalReturn > 0 ? (
+                        'text-success' 
+                      ) : 'text-danger'}
+                    >{formatDollar(coin.totalReturn, 12)}</span></td>
                   <td>${coin.equity}</td>
                 </tr>
               ))}
