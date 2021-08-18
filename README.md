@@ -85,7 +85,7 @@ Each new user must confirm they “hodl” before signing up through an initial 
 If ‘Paper Hands, they are blocked
 If ’Diamond Hands’, they are redirected to a sign in page
 
-![gate](/static/gif/gate2.gif "gate")
+![gate](/static/gif/gate.gif "gate")
 #### Main Page
 The main page allows users to easily view and update their total current holdings easily
 
