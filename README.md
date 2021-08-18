@@ -107,14 +107,14 @@ Users are provided additional information to help them with their decisions. Cur
 
 ![price](/static/gif/price.gif "price")
 
-#### Exchange
-Users are provided exchanges websites by trust rank. 
-<!-- ![Save & Share Quiz Results](/static/gif/saveresults.gif "Save & Share Quiz Results") -->
 #### News
 Top articles on the news page, and follow links to view articles on the linked websites.
 
-<!-- ![Save & Share Quiz Results](/static/gif/saveresults.gif "Save & Share Quiz Results") -->
+![news](/static/gif/news.gif "news")
 
+#### Exchange
+Users are provided exchanges websites by trust rank. 
+<!-- ![Save & Share Quiz Results](/static/gif/saveresults.gif "Save & Share Quiz Results") -->
 
 ### <a name="aboutthedeveloper"></a> About the Developer
 Diamond Base developer Nara Kim is a landscape architect and software engineer. This is her first full-stack project. She can be found on [LinkedIn](https://www.linkedin.com/in/nara-kim-6b4b37b0/) and on [Github](https://github.com/max1011-em).
