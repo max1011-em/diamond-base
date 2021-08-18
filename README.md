@@ -32,7 +32,7 @@ Diamond base is a Single Page Application to centralize investment tracking and 
 ---
 ### Installation
 #### Prerequisites
-To run Eat Drink Vote, you must have installed:
+To run Diamond Base, you must have installed:
  - [PostgreSQL](https://www.postgresql.org/)
  - [Python](https://www.python.org/downloads/)
 
