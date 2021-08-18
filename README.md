@@ -104,7 +104,7 @@ Top articles on the news page, and follow links to view articles on the linked w
 #### Transactions
 View all transaction history and see a breakdown of their holdings. A pie through chart.js to visually display total holdings, allowing for an easily digestible breakdown.Users can click the coin and see all clicked coin transactions and can remove the data with the remove button.
 
-![Save & Share Quiz Results](/static/gif/saveresults.gif "Save & Share Quiz Results")
+
 
 <!-- ---
 ### <a name="featuresfor2.0"></a> Features for 2.0
