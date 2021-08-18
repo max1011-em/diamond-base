@@ -82,19 +82,25 @@ $ python3 server.py
 
 #### Gate
 Each new user must confirm they “hodl” before signing up through an initial gate where they are asked their  ‘Diamond Hands’ or ‘Paper Hands’ status. 
-If ‘Paper Hands, they are blocked
-If ’Diamond Hands’, they are redirected to a sign in page
+If ‘Paper Hands, they are blocked.
+If ’Diamond Hands’, they are redirected to a sign in page.
 
 ![gate](/static/gif/gate1.gif "gate")
 
 #### Main Page
-The main page allows users to easily view and update their total current holdings easily
+The main page allows users to easily view and update their total current holdings easily.
+
 ![main](/static/gif/main1.gif "main")
 
 #### Search coin
 To make finding coin information easy, users can also find information related to any coin with autocomplete search.Using Chart.js with custom algorithms to display historical data for 24h to 1 year. Users can also see date and price by hovering over each point of data.
  
 ![search coin](/static/gif/searchCoin.gif "search coin")
+
+#### Transactions
+View all transaction history and see a breakdown of their holdings. A pie through chart.js to visually display total holdings, allowing for an easily digestible breakdown.Users can click the coin and see all clicked coin transactions and can remove the data with the remove button.
+
+![transaction](/static/gif/transaction.gif "transaction")
 
 #### Price
 Users are provided additional information to help them with their decisions. Current top 100 coins by market cap are shown under prices. Each list item connects to a coin information page.
@@ -107,19 +113,6 @@ Users are provided exchanges websites by trust rank.
 Top articles on the news page, and follow links to view articles on the linked websites.
 
 <!-- ![Save & Share Quiz Results](/static/gif/saveresults.gif "Save & Share Quiz Results") -->
-#### Transactions
-View all transaction history and see a breakdown of their holdings. A pie through chart.js to visually display total holdings, allowing for an easily digestible breakdown.Users can click the coin and see all clicked coin transactions and can remove the data with the remove button.
-
-
-
-<!-- ---
-### <a name="featuresfor2.0"></a> Features for 2.0
-Future iterations of this project will include:
-* When a user searches for a company/politician in the search bar, all industry/state cells not containing that company will disappear. 
-* Companies' names on the quiz page link out to their cells on the Browse Companies page.
-* Quiz will be expanded to recommend food companies to users based on the issues that matter to them.
-* Quiz will be lengthened to include more questions on more key issues.
---- -->
 
 
 ### <a name="aboutthedeveloper"></a> About the Developer
