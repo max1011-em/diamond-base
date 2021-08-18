@@ -57,7 +57,7 @@ Get an API key from OpenSecrets and add your API key to the opensecrets_api.py f
 
 Create database 'coins':
    ```
-$ createdb donations
+$ createdb coins
 ```
 To create the database tables and seed the database with each CSV file (indivs18, votes, industry_codes), run the following commands:
    ```
@@ -68,9 +68,6 @@ $ python3 seed_database.py
 ```
    ```
 $ python3 news_api_functions.py
-```
-   ```
-$ python3 opensecrets_api.py
 ```
   
 To run the app from the command line:
