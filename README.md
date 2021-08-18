@@ -41,7 +41,7 @@ To run Eat Drink Vote, you must have installed:
 
  Clone or fork repository:
  ```
- $ git clone https://github.com/max1011-em/diamond-base
+ $ git clone https://github.com/max1011-em/diamond-base.git
  ```
 
 Create and activate a virtual environment within your Eat Drink Vote directory:
