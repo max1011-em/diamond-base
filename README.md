@@ -106,14 +106,14 @@ View all transaction history and see a breakdown of their holdings. A pie throug
 
 ![Save & Share Quiz Results](/static/gif/saveresults.gif "Save & Share Quiz Results")
 
----
+<!-- ---
 ### <a name="featuresfor2.0"></a> Features for 2.0
 Future iterations of this project will include:
 * When a user searches for a company/politician in the search bar, all industry/state cells not containing that company will disappear. 
 * Companies' names on the quiz page link out to their cells on the Browse Companies page.
 * Quiz will be expanded to recommend food companies to users based on the issues that matter to them.
 * Quiz will be lengthened to include more questions on more key issues.
----
+--- -->
 
 
 ### <a name="aboutthedeveloper"></a> About the Developer
