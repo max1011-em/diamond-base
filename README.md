@@ -114,7 +114,7 @@ Top articles on the news page, and follow links to view articles on the linked w
 
 #### Exchange
 Users are provided exchanges websites by trust rank. 
-<!-- ![Save & Share Quiz Results](/static/gif/saveresults.gif "Save & Share Quiz Results") -->
+![exchange](/static/img/exchange.png "exchange")
 
 ### <a name="aboutthedeveloper"></a> About the Developer
 Diamond Base developer Nara Kim is a landscape architect and software engineer. This is her first full-stack project. She can be found on [LinkedIn](https://www.linkedin.com/in/nara-kim-6b4b37b0/) and on [Github](https://github.com/max1011-em).
