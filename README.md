@@ -105,7 +105,8 @@ View all transaction history and see a breakdown of their holdings. A pie throug
 #### Price
 Users are provided additional information to help them with their decisions. Current top 100 coins by market cap are shown under prices. Each list item connects to a coin information page.
 
-<!-- ![Why It Matters Quiz](/static/gif/quiz.gif "Why It Matters Quiz") -->
+![price](/static/gif/price.gif "price")
+
 #### Exchange
 Users are provided exchanges websites by trust rank. 
 <!-- ![Save & Share Quiz Results](/static/gif/saveresults.gif "Save & Share Quiz Results") -->
