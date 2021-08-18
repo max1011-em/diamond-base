@@ -86,10 +86,16 @@ If ‘Paper Hands, they are blocked
 If ’Diamond Hands’, they are redirected to a sign in page
 
 ![gate](/static/gif/gate1.gif "gate")
+
 #### Main Page
 The main page allows users to easily view and update their total current holdings easily
-
 ![main](/static/gif/main1.gif "main")
+
+#### Search coin
+To make finding coin information easy, users can also find information related to any coin with autocomplete search.Using Chart.js with custom algorithms to display historical data for 24h to 1 year. Users can also see date and price by hovering over each point of data.
+ 
+![search coin](/static/gif/searchCoin.gif "search coin")
+
 #### Price
 Users are provided additional information to help them with their decisions. Current top 100 coins by market cap are shown under prices. Each list item connects to a coin information page.
 
