@@ -44,7 +44,7 @@ To run Diamond Base, you must have installed:
  $ git clone https://github.com/max1011-em/diamond-base.git
  ```
 
-Create and activate a virtual environment within your Eat Drink Vote directory:
+Create and activate a virtual environment within your Diamond Base directory:
 ```
 $ virtualenv env
 $ source env/bin/activate
@@ -53,13 +53,11 @@ Install dependencies:
 ```
 $ pip install -r requirements.txt
 ```
-Get an API key from OpenSecrets and add your API key to the opensecrets_api.py file.
-
 Create database 'coins':
    ```
 $ createdb coins
 ```
-To create the database tables and seed the database with each CSV file (indivs18, votes, industry_codes), run the following commands:
+To create the database tables and seed the database, run the following commands:
    ```
 $ python3 model.py
 ```
