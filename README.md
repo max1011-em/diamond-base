@@ -89,7 +89,7 @@ If ’Diamond Hands’, they are redirected to a sign in page
 #### Main Page
 The main page allows users to easily view and update their total current holdings easily
 
-<!-- ![Browse Politicians](/static/gif/browsepoliticians.gif "Browse Politicians") -->
+![main](/static/gif/main.gif "main")
 #### Price
 Users are provided additional information to help them with their decisions. Current top 100 coins by market cap are shown under prices. Each list item connects to a coin information page.
 
