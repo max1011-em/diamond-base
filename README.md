@@ -51,8 +51,16 @@ $ source env/bin/activate
 ```
 Install dependencies:
 ```
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
+
+Make an account with [NewsAPI](https://newsapi.org/) & get an [API key](https://newsapi.org/account).<br>
+
+Store these keys in a file named 'secrets.sh' <br> 
+```
+$ source apikey.py
+```
+
 Create database 'coins':
    ```
 $ createdb coins
