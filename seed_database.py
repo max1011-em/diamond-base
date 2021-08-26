@@ -15,7 +15,7 @@ model.connect_to_db(server.app)
 model.db.create_all()
 
 # Load coin data from JSON file
-with open("data/coin_list2.json") as f:
+with open("data/coin_list.json") as f:
     coin_data = json.loads(f.read())
 
 coins_in_db = []
